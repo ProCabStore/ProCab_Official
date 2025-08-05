@@ -14,7 +14,7 @@
           const navbarContainer = document.getElementById("navbar-container");
           navbarContainer.innerHTML = data;
 
-          // Wait until it's inserted, then get navbar height and set hero height
+          // Adjust hero height
           const navbar = navbarContainer.querySelector(".navbar");
           if (navbar) {
             const observer = new ResizeObserver(() => {
@@ -22,6 +22,20 @@
             });
             observer.observe(navbar);
             adjustHeroHeight(navbar.offsetHeight);
+          }
+
+          // ✅ Re-bind hamburger toggle script
+          const navbarToggle = navbarContainer.querySelector('#navbarToggle');
+          const navbarMenu = navbarContainer.querySelector('#navbarMenu');
+
+          if (navbarToggle && navbarMenu) {
+            navbarToggle.addEventListener('click', function () {
+              navbarToggle.classList.toggle('is-active');
+              navbarMenu.classList.toggle('is-active');
+
+              const isExpanded = navbarToggle.getAttribute('aria-expanded') === 'true';
+              navbarToggle.setAttribute('aria-expanded', !isExpanded);
+            });
           }
         });
 
@@ -65,6 +79,7 @@
       background-size: cover;
       background-position: center;
       overflow: hidden;
+      z-index: 0; /* ✅ Ensure below navbar */
     }
 
     .new-arrival-hero::before {
@@ -126,11 +141,10 @@
   <!-- Navbar container -->
   <div id="navbar-container"></div>
 
-  <!-- Hero section: height will be adjusted with JS -->
+  <!-- Hero section -->
   <section class="new-arrival-hero">
     <div class="new-arrival-hero-content">
-      <h1 class="new-arrival-hero-title">Cabinet Store
-      </h1>
+      <h1 class="new-arrival-hero-title">Cabinet Store</h1>
       <p class="new-arrival-hero-tagline">
         Wardrobe, bed frame, desk, side table and many more!
       </p>
@@ -140,6 +154,7 @@
 
 </body>
 </html>
+
 
 
 
