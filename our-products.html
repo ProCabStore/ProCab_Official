@@ -13,6 +13,8 @@
 
     #navbar {
       margin-bottom: 1rem;
+      position: relative;
+      z-index: 9999;
     }
 
     .filter-bar {
@@ -110,7 +112,6 @@
       color: #3730a3;
     }
 
-    /* Responsive */
     @media (max-width: 768px) {
       .he-card {
         width: calc(33.33% - 0.75rem);
@@ -143,6 +144,22 @@
       .then(res => res.text())
       .then(html => {
         document.getElementById('navbar').innerHTML = html;
+
+        // ✅ Wait until DOM updates before attaching toggle behavior
+        setTimeout(() => {
+          const toggle = document.getElementById('navbarToggle');
+          const menu = document.getElementById('navbarMenu');
+
+          if (toggle && menu) {
+            toggle.addEventListener('click', () => {
+              toggle.classList.toggle('is-active');
+              menu.classList.toggle('is-active');
+
+              const expanded = toggle.getAttribute('aria-expanded') === 'true';
+              toggle.setAttribute('aria-expanded', !expanded);
+            });
+          }
+        }, 50);
       });
 
     let allProducts = [];
@@ -188,7 +205,6 @@
         const card = document.createElement('article');
         card.className = 'he-card';
 
-        // Pick first color for image preview
         let previewImage = product.image || 'https://picsum.photos/seed/' + product.id + '/600/400';
         if (product.colors && typeof product.colors === 'object') {
           const firstColor = Object.values(product.colors)[0];
@@ -241,3 +257,4 @@
 
 </body>
 </html>
+
