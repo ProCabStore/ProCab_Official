@@ -1,0 +1,374 @@
+[
+  {
+    "id": "product1",
+    "name": "Combo Cabinet",
+    "category": "cabinet",
+    "basePrice": 550,
+    "image": "#",
+    "melamineChipboardUsed": true,
+    "blockboardUsed": true,
+    "formicaUsed": true,
+    "colors": {
+      "white": "photo/Enscape_2025-08-03-20-22-20.png",
+      "oak": "photo/ComboCabinet_oak.png"
+    },
+    "formicaColors": {
+      "black": "photo/ComboCabinet_black.png",
+      "white": "photo/Enscape_2025-08-03-20-22-20.png"
+    }
+  },
+  {
+    "id": "product2",
+    "name": "Simple Cabinet 2",
+    "category": "shelf",
+    "basePrice": 645,
+    "melamineChipboardUsed": false,
+    "blockboardUsed": true,
+    "formicaUsed": true,
+    "colors": {},
+    "formicaColors": {
+      "oak": "photo/SimpleCabinet2_oak.png"
+    }
+  },
+  {
+    "id": "product3",
+    "name": "Elegant Cabinet 3",
+    "category": "desk",
+    "basePrice": 345,
+    "melamineChipboardUsed": false,
+    "blockboardUsed": true,
+    "formicaUsed": true,
+    "colors": {
+      "black": "photo/ElegantCabinet3_black.png",
+      "white": "photo/ElegantCabinet3_white.png"
+    },
+    "formicaColors": {
+      "black": "photo/ElegantCabinet3_formica_black.png"
+    }
+  },
+  {
+    "id": "product4",
+    "name": "Elegant Cabinet 4",
+    "category": "bed frame",
+    "basePrice": 279,
+    "melamineChipboardUsed": false,
+    "blockboardUsed": false,
+    "formicaUsed": true,
+    "colors": {
+      "black": "photo/ElegantCabinet4_black.png",
+      "white": "photo/ElegantCabinet4_white.png"
+    },
+    "formicaColors": {
+      "white": "photo/ElegantCabinet4_formica_white.png"
+    }
+  },
+  {
+    "id": "product5",
+    "name": "Classic Cabinet 5",
+    "category": "wardrobe",
+    "basePrice": 585,
+    "melamineChipboardUsed": false,
+    "blockboardUsed": true,
+    "formicaUsed": false,
+    "colors": {
+      "white": "photo/ClassicCabinet5_white.png"
+    },
+    "formicaColors": {}
+  },
+  {
+    "id": "product6",
+    "name": "Simple Cabinet 6",
+    "category": "desk",
+    "basePrice": 382,
+    "melamineChipboardUsed": true,
+    "blockboardUsed": false,
+    "formicaUsed": true,
+    "colors": {
+      "white": "photo/SimpleCabinet6_white.png",
+      "black": "photo/SimpleCabinet6_black.png"
+    },
+    "formicaColors": {
+      "white": "photo/SimpleCabinet6_formica_white.png",
+      "oak": "photo/SimpleCabinet6_formica_oak.png"
+    }
+  },
+  {
+    "id": "product7",
+    "name": "Modern Cabinet 7",
+    "category": "shoe rack",
+    "basePrice": 636,
+    "melamineChipboardUsed": true,
+    "blockboardUsed": true,
+    "formicaUsed": false,
+    "colors": {
+      "oak": "photo/ModernCabinet7_oak.png"
+    },
+    "formicaColors": {}
+  },
+  {
+    "id": "product8",
+    "name": "Simple Cabinet 8",
+    "category": "shelf",
+    "basePrice": 865,
+    "melamineChipboardUsed": true,
+    "blockboardUsed": false,
+    "formicaUsed": true,
+    "colors": {
+      "oak": "photo/SimpleCabinet8_oak.png"
+    },
+    "formicaColors": {
+      "white": "photo/SimpleCabinet8_formica_white.png",
+      "black": "photo/SimpleCabinet8_formica_black.png"
+    }
+  },
+  {
+    "id": "product9",
+    "name": "Simple Cabinet 9",
+    "category": "wardrobe",
+    "basePrice": 309,
+    "melamineChipboardUsed": true,
+    "blockboardUsed": false,
+    "formicaUsed": false,
+    "colors": {
+      "white": "photo/SimpleCabinet9_white.png"
+    },
+    "formicaColors": {}
+  },
+  {
+    "id": "product10",
+    "name": "Modern Cabinet 10",
+    "category": "bed frame",
+    "basePrice": 410,
+    "melamineChipboardUsed": true,
+    "blockboardUsed": true,
+    "formicaUsed": true,
+    "colors": {
+      "black": "photo/ModernCabinet10_black.png",
+      "oak": "photo/ModernCabinet10_oak.png"
+    },
+    "formicaColors": {
+      "black": "photo/ModernCabinet10_formica_black.png",
+      "oak": "photo/ModernCabinet10_formica_oak.png"
+    }
+  },
+  {
+    "id": "product31",
+    "name": "Retro Cabinet 31",
+    "category": "wardrobe",
+    "basePrice": 480,
+    "melamineChipboardUsed": false,
+    "blockboardUsed": true,
+    "formicaUsed": true,
+    "colors": {
+      "white": "photo/RetroCabinet31_white.png"
+    },
+    "formicaColors": {
+      "black": "photo/RetroCabinet31_formica_black.png"
+    }
+  },
+  {
+    "id": "product32",
+    "name": "Urban Cabinet 32",
+    "category": "desk",
+    "basePrice": 1003,
+    "melamineChipboardUsed": true,
+    "blockboardUsed": true,
+    "formicaUsed": false,
+    "colors": {
+      "oak": "photo/UrbanCabinet32_oak.png",
+      "black": "photo/UrbanCabinet32_black.png"
+    },
+    "formicaColors": {}
+  },
+  {
+    "id": "product33",
+    "name": "Retro Cabinet 33",
+    "category": "tv cabinet",
+    "basePrice": 429,
+    "melamineChipboardUsed": true,
+    "blockboardUsed": false,
+    "formicaUsed": false,
+    "colors": {
+      "white": "photo/RetroCabinet33_white.png"
+    },
+    "formicaColors": {}
+  },
+  {
+    "id": "product34",
+    "name": "Urban Cabinet 34",
+    "category": "desk",
+    "basePrice": 576,
+    "melamineChipboardUsed": false,
+    "blockboardUsed": false,
+    "formicaUsed": true,
+    "colors": {
+      "oak": "photo/UrbanCabinet34_oak.png"
+    },
+    "formicaColors": {
+      "white": "photo/UrbanCabinet34_formica_white.png",
+      "black": "photo/UrbanCabinet34_formica_black.png"
+    }
+  },
+  {
+    "id": "product35",
+    "name": "Eco Cabinet 35",
+    "category": "shelf",
+    "basePrice": 1180,
+    "melamineChipboardUsed": true,
+    "blockboardUsed": false,
+    "formicaUsed": true,
+    "colors": {
+      "black": "photo/EcoCabinet35_black.png",
+      "oak": "photo/EcoCabinet35_oak.png"
+    },
+    "formicaColors": {
+      "black": "photo/EcoCabinet35_formica_black.png"
+    }
+  },
+  {
+    "id": "product36",
+    "name": "Urban Cabinet 36",
+    "category": "tv cabinet",
+    "basePrice": 712,
+    "melamineChipboardUsed": true,
+    "blockboardUsed": true,
+    "formicaUsed": false,
+    "colors": {
+      "oak": "photo/UrbanCabinet36_oak.png",
+      "white": "photo/UrbanCabinet36_white.png"
+    },
+    "formicaColors": {}
+  },
+  {
+    "id": "product37",
+    "name": "Eco Cabinet 37",
+    "category": "shoe rack",
+    "basePrice": 322,
+    "melamineChipboardUsed": false,
+    "blockboardUsed": true,
+    "formicaUsed": true,
+    "colors": {
+      "black": "photo/EcoCabinet37_black.png"
+    },
+    "formicaColors": {
+      "oak": "photo/EcoCabinet37_formica_oak.png"
+    }
+  },
+  {
+    "id": "product38",
+    "name": "Urban Cabinet 38",
+    "category": "desk",
+    "basePrice": 352,
+    "melamineChipboardUsed": true,
+    "blockboardUsed": false,
+    "formicaUsed": true,
+    "colors": {
+      "white": "photo/UrbanCabinet38_white.png"
+    },
+    "formicaColors": {
+      "black": "photo/UrbanCabinet38_formica_black.png"
+    }
+  },
+  {
+    "id": "product39",
+    "name": "Premium Cabinet 39",
+    "category": "tv cabinet",
+    "basePrice": 1005,
+    "melamineChipboardUsed": true,
+    "blockboardUsed": true,
+    "formicaUsed": true,
+    "colors": {
+      "oak": "photo/PremiumCabinet39_oak.png"
+    },
+    "formicaColors": {
+      "white": "photo/PremiumCabinet39_formica_white.png"
+    }
+  },
+  {
+    "id": "product40",
+    "name": "Urban Cabinet 40",
+    "category": "side table",
+    "basePrice": 438,
+    "melamineChipboardUsed": false,
+    "blockboardUsed": true,
+    "formicaUsed": true,
+    "colors": {
+      "white": "photo/UrbanCabinet40_white.png",
+      "oak": "photo/UrbanCabinet40_oak.png"
+    },
+    "formicaColors": {
+      "black": "photo/UrbanCabinet40_formica_black.png"
+    }
+  },
+  {
+    "id": "product41",
+    "name": "Retro Cabinet 41",
+    "category": "wardrobe",
+    "basePrice": 952,
+    "melamineChipboardUsed": true,
+    "blockboardUsed": false,
+    "formicaUsed": false,
+    "colors": {
+      "white": "photo/RetroCabinet41_white.png",
+      "black": "photo/RetroCabinet41_black.png"
+    },
+    "formicaColors": {}
+  },
+  {
+    "id": "product42",
+    "name": "Urban Cabinet 42",
+    "category": "bed frame",
+    "basePrice": 551,
+    "melamineChipboardUsed": false,
+    "blockboardUsed": false,
+    "formicaUsed": true,
+    "colors": {
+      "oak": "photo/UrbanCabinet42_oak.png"
+    },
+    "formicaColors": {
+      "oak": "photo/UrbanCabinet42_formica_oak.png"
+    }
+  },
+  {
+    "id": "product43",
+    "name": "Eco Cabinet 43",
+    "category": "shoe rack",
+    "basePrice": 912,
+    "melamineChipboardUsed": true,
+    "blockboardUsed": true,
+    "formicaUsed": false,
+    "colors": {
+      "white": "photo/EcoCabinet43_white.png"
+    },
+    "formicaColors": {}
+  },
+  {
+    "id": "product44",
+    "name": "Retro Cabinet 44",
+    "category": "desk",
+    "basePrice": 793,
+    "melamineChipboardUsed": true,
+    "blockboardUsed": false,
+    "formicaUsed": true,
+    "colors": {
+      "black": "photo/RetroCabinet44_black.png"
+    },
+    "formicaColors": {
+      "white": "photo/RetroCabinet44_formica_white.png",
+      "oak": "photo/RetroCabinet44_formica_oak.png"
+    }
+  },
+  {
+    "id": "product45",
+    "name": "Eco Cabinet 45",
+    "category": "bed frame",
+    "basePrice": 743,
+    "melamineChipboardUsed": false,
+    "blockboardUsed": true,
+    "formicaUsed": false,
+    "colors": {
+      "black": "photo/EcoCabinet45_black.png"
+    },
+    "formicaColors": {}
+  }
+]

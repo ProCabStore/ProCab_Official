@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>My Example</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Load navbar.html into #navbar-container -->
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      fetch("navbar.html")
+        .then(response => response.text())
+        .then(data => {
+          const navbarContainer = document.getElementById("navbar-container");
+          navbarContainer.innerHTML = data;
+
+          // Wait until it's inserted, then get navbar height and set hero height
+          const navbar = navbarContainer.querySelector(".navbar");
+          if (navbar) {
+            const observer = new ResizeObserver(() => {
+              adjustHeroHeight(navbar.offsetHeight);
+            });
+            observer.observe(navbar);
+            adjustHeroHeight(navbar.offsetHeight);
+          }
+        });
+
+      function adjustHeroHeight(navHeight) {
+        const hero = document.querySelector(".new-arrival-hero");
+        if (hero) {
+          hero.style.height = `calc(100vh - ${navHeight}px)`;
+        }
+      }
+    });
+  </script>
+
+  <style>
+    :root {
+      --nah-padding: 2rem 1.5rem;
+      --nah-text-color: #ffffff;
+      --nah-overlay-color: rgba(0, 0, 0, 0.5);
+      --nah-cta-bg: #ffffff;
+      --nah-cta-text-color: #000000;
+      --nah-cta-hover-bg: #f0f0f0;
+      --nah-background-image: url('photo/Enscape_2025-08-03-20-22-20.png');
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+    }
+
+    .new-arrival-hero {
+      box-sizing: border-box;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      position: relative;
+      width: 100%;
+      padding: var(--nah-padding);
+      color: var(--nah-text-color);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      background-image: var(--nah-background-image);
+      background-size: cover;
+      background-position: center;
+      overflow: hidden;
+    }
+
+    .new-arrival-hero::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: var(--nah-overlay-color);
+      z-index: 1;
+    }
+
+    .new-arrival-hero * {
+      box-sizing: border-box;
+    }
+
+    .new-arrival-hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 600px;
+    }
+
+    .new-arrival-hero-title {
+      margin: 0 0 1rem 0;
+      font-size: clamp(2.5rem, 6vw, 4rem);
+      font-weight: 700;
+      line-height: 1.2;
+    }
+
+    .new-arrival-hero-tagline {
+      margin: 0 0 1.5rem 0;
+      font-size: clamp(1rem, 2.5vw, 1.25rem);
+      opacity: 0.9;
+      line-height: 1.5;
+    }
+
+    .new-arrival-hero-cta {
+      display: inline-block;
+      background-color: var(--nah-cta-bg);
+      color: var(--nah-cta-text-color);
+      border: none;
+      padding: 0.8rem 2.2rem;
+      font-size: 1rem;
+      font-weight: 600;
+      border-radius: 5px;
+      text-decoration: none;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .new-arrival-hero-cta:hover {
+      background-color: var(--nah-cta-hover-bg);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar container -->
+  <div id="navbar-container"></div>
+
+  <!-- Hero section: height will be adjusted with JS -->
+  <section class="new-arrival-hero">
+    <div class="new-arrival-hero-content">
+      <h1 class="new-arrival-hero-title">Cabinet Store
+      </h1>
+      <p class="new-arrival-hero-tagline">
+        Wardrobe, bed frame, desk, side table and many more!
+      </p>
+      <a href="our-products.html" role="button" class="new-arrival-hero-cta">Explore the Collection</a>
+    </div>
+  </section>
+
+</body>
+</html>
+

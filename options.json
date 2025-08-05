@@ -1,0 +1,46 @@
+{
+  "categories": [
+    "desk",
+    "side table",
+    "bed frame",
+    "wardrobe",
+    "tv cabinet",
+    "shoe rack",
+    "shelf"
+  ],
+
+  "materials": {
+    "melamine chipboard": {
+      "type": "melamine chipboard",
+      "typePrice": 0,
+      "colors": {
+        "white": 30,
+        "black": 40,
+        "oak": 60
+      }
+    },
+    "blockboard": {
+      "type": "blockboard",
+      "typePrice": 80
+    },
+    "formica": {
+      "type": "formica",
+      "colors": {
+        "white": 43,
+        "black": 52,
+        "oak": 80
+      }
+    }
+  },
+
+  "doorHinges": {
+    "non soft close": 10,
+    "soft close": 20
+  },
+
+  "drawerSlides": {
+    "non soft close": 15,
+    "soft close": 40
+  }
+}
+

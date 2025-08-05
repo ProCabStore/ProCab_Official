@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Our Products</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: system-ui, sans-serif;
+      background-color: #f9fafb;
+    }
+
+    #navbar {
+      margin-bottom: 1rem;
+    }
+
+    .filter-bar {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 1rem;
+    }
+
+    .filter-button {
+      background-color: #e5e7eb;
+      color: #111827;
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.9rem;
+    }
+
+    .filter-button.active {
+      background-color: #007bff;
+      color: white;
+    }
+
+    .product-grid {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1rem;
+      padding: 1rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .he-card {
+      width: 180px;
+      background: #ffffff;
+      border-radius: 12px;
+      box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -2px rgba(0,0,0,0.1);
+      overflow: hidden;
+      transition: transform 0.25s ease-in-out;
+      display: flex;
+      flex-direction: column;
+      flex-shrink: 0;
+    }
+
+    .he-card:hover {
+      transform: scale(1.04);
+    }
+
+    .he-card-link {
+      display: flex;
+      flex-direction: column;
+      text-decoration: none;
+      color: inherit;
+      height: 100%;
+    }
+
+    .he-card-image {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      object-fit: cover;
+      display: block;
+      flex-shrink: 0;
+    }
+
+    .he-card-content {
+      padding: 0.75rem;
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+    }
+
+    .he-card-title {
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin: 0 0 0.25rem 0;
+    }
+
+    .he-card-description {
+      font-size: 0.7rem;
+      color: #4b5563;
+      margin: 0.1rem 0;
+    }
+
+    .badge {
+      display: inline-block;
+      font-size: 0.6rem;
+      padding: 2px 5px;
+      margin: 2px 4px 0 0;
+      border-radius: 4px;
+      background-color: #e0e7ff;
+      color: #3730a3;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .he-card {
+        width: calc(33.33% - 0.75rem);
+      }
+    }
+
+    @media (max-width: 576px) {
+      .he-card {
+        width: calc(50% - 0.75rem);
+      }
+    }
+
+    @media (max-width: 360px) {
+      .he-card {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div id="navbar"></div>
+
+  <div class="filter-bar" id="filterBar"></div>
+  <section class="product-grid" id="productGrid"></section>
+
+  <script>
+    // Load navbar
+    fetch('navbar.html')
+      .then(res => res.text())
+      .then(html => {
+        document.getElementById('navbar').innerHTML = html;
+      });
+
+    let allProducts = [];
+    let selectedCategory = 'all';
+
+    function createFilterButtons(categories) {
+      const bar = document.getElementById('filterBar');
+      bar.innerHTML = '';
+
+      const allBtn = document.createElement('button');
+      allBtn.textContent = 'All';
+      allBtn.className = 'filter-button active';
+      allBtn.onclick = () => {
+        selectedCategory = 'all';
+        updateActiveFilter(allBtn);
+        renderProducts(allProducts);
+      };
+      bar.appendChild(allBtn);
+
+      categories.forEach(cat => {
+        const btn = document.createElement('button');
+        btn.textContent = cat.charAt(0).toUpperCase() + cat.slice(1);
+        btn.className = 'filter-button';
+        btn.onclick = () => {
+          selectedCategory = cat;
+          updateActiveFilter(btn);
+          renderProducts(allProducts.filter(p => p.category === cat));
+        };
+        bar.appendChild(btn);
+      });
+    }
+
+    function updateActiveFilter(activeBtn) {
+      document.querySelectorAll('.filter-button').forEach(btn => btn.classList.remove('active'));
+      activeBtn.classList.add('active');
+    }
+
+    function renderProducts(products) {
+      const container = document.getElementById('productGrid');
+      container.innerHTML = '';
+
+      products.forEach(product => {
+        const card = document.createElement('article');
+        card.className = 'he-card';
+
+        // Pick first color for image preview
+        let previewImage = product.image || 'https://picsum.photos/seed/' + product.id + '/600/400';
+        if (product.colors && typeof product.colors === 'object') {
+          const firstColor = Object.values(product.colors)[0];
+          previewImage = firstColor;
+        } else if (product.formicaColors && typeof product.formicaColors === 'object') {
+          const firstFormicaColor = Object.values(product.formicaColors)[0];
+          previewImage = firstFormicaColor;
+        }
+
+        let colorBadges = '';
+        if (product.colors && typeof product.colors === 'object') {
+          colorBadges = Object.keys(product.colors).map(c => `<span class="badge">${c}</span>`).join('');
+        } else if (product.formicaColors && typeof product.formicaColors === 'object') {
+          colorBadges = Object.keys(product.formicaColors).map(c => `<span class="badge">${c}</span>`).join('');
+        }
+
+        card.innerHTML = `
+          <a href="product-detail.html?id=${product.id}" class="he-card-link" onclick="saveProduct('${product.id}')">
+            <img class="he-card-image" src="${previewImage}" alt="${product.name}">
+            <div class="he-card-content">
+              <div>
+                <h3 class="he-card-title">${product.name}</h3>
+                <p class="he-card-description">Category: ${product.category}</p>
+                <p class="he-card-description">From RM${product.basePrice}</p>
+              </div>
+              <div class="he-card-description">Colors: ${colorBadges}</div>
+            </div>
+          </a>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function saveProduct(id) {
+      const product = allProducts.find(p => p.id === id);
+      if (product) {
+        localStorage.setItem('selectedProduct', JSON.stringify(product));
+      }
+    }
+
+    fetch('products.json')
+      .then(res => res.json())
+      .then(data => {
+        allProducts = data;
+        const categories = [...new Set(data.map(p => p.category))];
+        createFilterButtons(categories);
+        renderProducts(allProducts);
+      });
+  </script>
+
+</body>
+</html>
