@@ -8,39 +8,34 @@
     "shoe rack",
     "shelf"
   ],
-
   "materials": {
     "melamine chipboard": {
-      "type": "melamine chipboard",
-      "typePrice": 0,
+      "price": 1,
       "colors": {
-        "white": 30,
-        "black": 40,
-        "oak": 60
+        "white": 100,
+        "black": 200,
+        "oak": 300,
+        "green sage": 400
       }
     },
     "blockboard": {
-      "type": "blockboard",
-      "typePrice": 80
-    },
-    "formica": {
-      "type": "formica",
+      "price": 50,
       "colors": {
-        "white": 43,
-        "black": 52,
-        "oak": 80
+        "white": 99,
+        "black": 199,
+        "oak": 299,
+        "navy blue": 399
       }
     }
   },
-
   "doorHinges": {
-    "non soft close": 10,
+    "normal": 10,
     "soft close": 20
   },
-
   "drawerSlides": {
-    "non soft close": 15,
-    "soft close": 40
+    "normal": 19,
+    "soft close": 29
   }
 }
+
 
