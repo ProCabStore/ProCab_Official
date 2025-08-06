@@ -5,256 +5,298 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Our Products</title>
   <style>
+    :root {
+      --color-background: #ffffff;
+      --color-foreground: #f8f9fa;
+      --color-text: #222;
+      --color-secondary: #666;
+      --color-primary: #007bff;
+      --color-primary-hover: #0056b3;
+      --color-border-subtle: #e9ecef;
+
+      --font-family-sans-serif: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      --font-weight-normal: 400;
+      --font-weight-bold: 600;
+
+      --transition-speed: 0.2s;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       margin: 0;
-      font-family: system-ui, sans-serif;
-      background-color: #f9fafb;
+      font-family: var(--font-family-sans-serif);
+      font-size: 1rem;
+      line-height: 1.5;
+      color: var(--color-text);
+      background-color: var(--color-background);
     }
 
-    #navbar {
-      margin-bottom: 1rem;
-      position: relative;
-      z-index: 9999;
-    }
-
-    .filter-bar {
+    /* ✅ Category List */
+    .category-list {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
       gap: 0.5rem;
-      padding: 1rem;
+      padding: 0.8rem;
+      background: var(--color-foreground);
+      border-bottom: 1px solid var(--color-border-subtle);
     }
 
-    .filter-button {
-      background-color: #e5e7eb;
-      color: #111827;
-      padding: 0.5rem 1rem;
-      border: none;
-      border-radius: 6px;
+    .category-list button {
+      background: #fff;
+      border: 1px solid var(--color-border-subtle);
+      border-radius: 18px;
+      padding: 0.4rem 1rem;
+      font-size: 0.85rem;
+      color: var(--color-text);
       cursor: pointer;
-      font-size: 0.9rem;
+      transition: all 0.2s ease;
     }
 
-    .filter-button.active {
-      background-color: #007bff;
-      color: white;
+    .category-list button:hover,
+    .category-list button.active {
+      background: var(--color-primary);
+      color: #fff;
+      border-color: var(--color-primary);
     }
 
+    /* ✅ Product Grid */
     .product-grid {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      gap: 1rem;
+      gap: 0.8rem;
       padding: 1rem;
-      max-width: 1200px;
-      margin: 0 auto;
     }
 
-    .he-card {
-      width: 180px;
-      background: #ffffff;
-      border-radius: 12px;
-      box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -2px rgba(0,0,0,0.1);
+    .product-card {
+      background: #fff;
+      border-radius: 6px;
+      border: 1px solid var(--color-border-subtle);
       overflow: hidden;
-      transition: transform 0.25s ease-in-out;
+      transition: transform 0.2s ease;
+      cursor: pointer;
+      flex: 1 1 150px;
+      max-width: 150px;
       display: flex;
       flex-direction: column;
-      flex-shrink: 0;
     }
 
-    .he-card:hover {
-      transform: scale(1.04);
+    .product-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
     }
 
-    .he-card-link {
-      display: flex;
-      flex-direction: column;
-      text-decoration: none;
-      color: inherit;
-      height: 100%;
-    }
-
-    .he-card-image {
+    .product-card img {
       width: 100%;
-      aspect-ratio: 1 / 1;
+      height: 120px;
       object-fit: cover;
-      display: block;
-      flex-shrink: 0;
+      background: #f3f3f3;
     }
 
-    .he-card-content {
-      padding: 0.75rem;
-      flex-grow: 1;
+    .product-info {
+      padding: 0.5rem;
       display: flex;
       flex-direction: column;
-      gap: 0.3rem;
+      gap: 0.25rem;
     }
 
-    .he-card-title {
-      font-size: 0.85rem;
+    .product-info h3 {
+      font-size: 0.9rem;
+      margin: 0;
+      color: var(--color-text);
+      font-weight: 500;
+      line-height: 1.2;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .product-info .colors {
+      font-size: 0.75rem;
+      color: var(--color-secondary);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .product-info p {
+      font-size: 0.95rem;
       font-weight: 600;
-      margin: 0 0 0.25rem 0;
+      margin: 0.1rem 0 0;
+      color: #000;
     }
 
-    .he-card-description {
-      font-size: 0.7rem;
-      color: #4b5563;
-      margin: 0.1rem 0;
-    }
-
-    .badge {
-      display: inline-block;
-      font-size: 0.6rem;
-      padding: 2px 5px;
-      margin: 2px 4px 0 0;
-      border-radius: 4px;
-      background-color: #e0e7ff;
-      color: #3730a3;
-    }
-
-    @media (max-width: 768px) {
-      .he-card {
-        width: calc(33.33% - 0.75rem);
+    @media (min-width: 768px) {
+      .product-card {
+        flex: 1 1 220px;
+        max-width: 220px;
       }
-    }
 
-    @media (max-width: 576px) {
-      .he-card {
-        width: calc(50% - 0.75rem);
+      .product-card img {
+        height: 180px;
       }
-    }
 
-    @media (max-width: 360px) {
-      .he-card {
-        width: 100%;
+      .product-info h3 {
+        font-size: 1rem;
+      }
+
+      .product-info p {
+        font-size: 1rem;
       }
     }
   </style>
 </head>
 <body>
+  <!-- ✅ Navbar will be loaded here -->
+  <div id="navbar-placeholder"></div>
 
-  <div id="navbar"></div>
-
-  <div class="filter-bar" id="filterBar"></div>
-  <section class="product-grid" id="productGrid"></section>
+  <!-- ✅ Category List -->
+  <div class="category-list" id="categoryList"></div>
+  <div class="product-grid" id="productGrid"></div>
 
   <script>
-    // Load navbar
+    // ✅ Load navbar dynamically
     fetch('navbar.html')
-      .then(res => res.text())
-      .then(html => {
-        document.getElementById('navbar').innerHTML = html;
+      .then(response => response.text())
+      .then(data => {
+        document.getElementById('navbar-placeholder').innerHTML = data;
 
-        // ✅ Wait until DOM updates before attaching toggle behavior
-        setTimeout(() => {
-          const toggle = document.getElementById('navbarToggle');
-          const menu = document.getElementById('navbarMenu');
-
-          if (toggle && menu) {
-            toggle.addEventListener('click', () => {
-              toggle.classList.toggle('is-active');
-              menu.classList.toggle('is-active');
-
-              const expanded = toggle.getAttribute('aria-expanded') === 'true';
-              toggle.setAttribute('aria-expanded', !expanded);
-            });
-          }
-        }, 50);
+        // ✅ After loading navbar, reattach toggle functionality
+        const navbarToggle = document.getElementById('navbarToggle');
+        const navbarMenu = document.getElementById('navbarMenu');
+        if (navbarToggle && navbarMenu) {
+          navbarToggle.addEventListener('click', () => {
+            navbarToggle.classList.toggle('is-active');
+            navbarMenu.classList.toggle('is-active');
+          });
+        }
       });
 
-    let allProducts = [];
-    let selectedCategory = 'all';
+    let productsData = [];
+    let optionsData = [];
+    let currentCategory = 'all';
 
-    function createFilterButtons(categories) {
-      const bar = document.getElementById('filterBar');
-      bar.innerHTML = '';
+    async function fetchData() {
+      const productsRes = await fetch('products.json');
+      const optionsRes = await fetch('options.json');
+      productsData = await productsRes.json();
+      optionsData = await optionsRes.json();
+      renderCategories(optionsData.categories);
+      renderProducts(productsData, optionsData);
+    }
+
+    function calculateCheapestPrice(product, options) {
+      let cheapestMaterialCost = Infinity;
+
+      for (const [materialName, materialData] of Object.entries(product.materials)) {
+        const baseMaterialPrice = options.materials[materialName].price;
+        const colorOptions = options.materials[materialName].colors;
+
+        for (const [colorName, colorInfo] of Object.entries(materialData.colors)) {
+          const materialPercentage = materialData.percentage;
+          const colorPercentage = colorInfo.percentage;
+          const colorPrice = colorOptions[colorName];
+
+          const cost =
+            (baseMaterialPrice * materialPercentage / 100) +
+            (colorPrice * colorPercentage / 100);
+
+          if (cost < cheapestMaterialCost) {
+            cheapestMaterialCost = cost;
+          }
+        }
+      }
+
+      let hingeCost = 0;
+      if (product.doorHinges && product.doorHinges.quantity > 0) {
+        const cheapestHinge = Math.min(...Object.values(options.doorHinges));
+        hingeCost = cheapestHinge * product.doorHinges.quantity;
+      }
+
+      let slideCost = 0;
+      if (product.drawerSlides && product.drawerSlides.quantity > 0) {
+        const cheapestSlide = Math.min(...Object.values(options.drawerSlides));
+        slideCost = cheapestSlide * product.drawerSlides.quantity;
+      }
+
+      return (cheapestMaterialCost + hingeCost + slideCost).toFixed(2);
+    }
+
+    function renderCategories(categories) {
+      const categoryContainer = document.getElementById('categoryList');
+      categoryContainer.innerHTML = '';
 
       const allBtn = document.createElement('button');
       allBtn.textContent = 'All';
-      allBtn.className = 'filter-button active';
-      allBtn.onclick = () => {
-        selectedCategory = 'all';
-        updateActiveFilter(allBtn);
-        renderProducts(allProducts);
-      };
-      bar.appendChild(allBtn);
+      allBtn.classList.add('active');
+      allBtn.onclick = () => filterByCategory('all');
+      categoryContainer.appendChild(allBtn);
 
       categories.forEach(cat => {
         const btn = document.createElement('button');
-        btn.textContent = cat.charAt(0).toUpperCase() + cat.slice(1);
-        btn.className = 'filter-button';
-        btn.onclick = () => {
-          selectedCategory = cat;
-          updateActiveFilter(btn);
-          renderProducts(allProducts.filter(p => p.category === cat));
-        };
-        bar.appendChild(btn);
+        btn.textContent = cat;
+        btn.onclick = () => filterByCategory(cat);
+        categoryContainer.appendChild(btn);
       });
     }
 
-    function updateActiveFilter(activeBtn) {
-      document.querySelectorAll('.filter-button').forEach(btn => btn.classList.remove('active'));
-      activeBtn.classList.add('active');
+    function filterByCategory(category) {
+      currentCategory = category;
+      const buttons = document.querySelectorAll('.category-list button');
+      buttons.forEach(btn => btn.classList.remove('active'));
+      const activeBtn = [...buttons].find(btn => btn.textContent.toLowerCase() === (category === 'all' ? 'all' : category.toLowerCase()));
+      if (activeBtn) activeBtn.classList.add('active');
+
+      const filteredProducts = category === 'all'
+        ? productsData
+        : productsData.filter(p => p.category.toLowerCase() === category.toLowerCase());
+      renderProducts(filteredProducts, optionsData);
     }
 
-    function renderProducts(products) {
-      const container = document.getElementById('productGrid');
-      container.innerHTML = '';
+    function renderProducts(products, options) {
+      const grid = document.getElementById('productGrid');
+      grid.innerHTML = '';
 
       products.forEach(product => {
-        const card = document.createElement('article');
-        card.className = 'he-card';
+        const cheapestPrice = calculateCheapestPrice(product, options);
+        const firstImage = Object.values(product.images)[0] || '#';
 
-        let previewImage = product.image || 'https://picsum.photos/seed/' + product.id + '/600/400';
-        if (product.colors && typeof product.colors === 'object') {
-          const firstColor = Object.values(product.colors)[0];
-          previewImage = firstColor;
-        } else if (product.formicaColors && typeof product.formicaColors === 'object') {
-          const firstFormicaColor = Object.values(product.formicaColors)[0];
-          previewImage = firstFormicaColor;
+        const colorNames = [];
+        for (const [material, matData] of Object.entries(product.materials)) {
+          colorNames.push(...Object.keys(matData.colors));
         }
+        const uniqueColors = [...new Set(colorNames)];
 
-        let colorBadges = '';
-        if (product.colors && typeof product.colors === 'object') {
-          colorBadges = Object.keys(product.colors).map(c => `<span class="badge">${c}</span>`).join('');
-        } else if (product.formicaColors && typeof product.formicaColors === 'object') {
-          colorBadges = Object.keys(product.formicaColors).map(c => `<span class="badge">${c}</span>`).join('');
-        }
+        const colorDisplay = uniqueColors.length > 2
+          ? `${uniqueColors.slice(0, 2).join(', ')} +${uniqueColors.length - 2} more`
+          : uniqueColors.join(', ');
 
+        const card = document.createElement('div');
+        card.className = 'product-card';
+        card.onclick = () => {
+          window.location.href = `product-detail.html?id=${product.id}`;
+        };
         card.innerHTML = `
-          <a href="product-detail.html?id=${product.id}" class="he-card-link" onclick="saveProduct('${product.id}')">
-            <img class="he-card-image" src="${previewImage}" alt="${product.name}">
-            <div class="he-card-content">
-              <div>
-                <h3 class="he-card-title">${product.name}</h3>
-                <p class="he-card-description">Category: ${product.category}</p>
-                <p class="he-card-description">From RM${product.basePrice}</p>
-              </div>
-              <div class="he-card-description">Colors: ${colorBadges}</div>
-            </div>
-          </a>
+          <img src="${firstImage}" alt="${product.name}">
+          <div class="product-info">
+            <h3>${product.name}</h3>
+            <div class="colors">${colorDisplay}</div>
+            <p>RM ${cheapestPrice}</p>
+          </div>
         `;
-        container.appendChild(card);
+        grid.appendChild(card);
       });
     }
 
-    function saveProduct(id) {
-      const product = allProducts.find(p => p.id === id);
-      if (product) {
-        localStorage.setItem('selectedProduct', JSON.stringify(product));
-      }
-    }
-
-    fetch('products.json')
-      .then(res => res.json())
-      .then(data => {
-        allProducts = data;
-        const categories = [...new Set(data.map(p => p.category))];
-        createFilterButtons(categories);
-        renderProducts(allProducts);
-      });
+    fetchData();
   </script>
-
 </body>
 </html>
+
+
+
 
