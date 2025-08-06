@@ -1,280 +1,432 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Product Detail</title>
   <style>
     body {
-      font-family: system-ui, sans-serif;
-      background-color: #f3f4f6;
+      font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+      background-color: #f4f5f7;
+      margin: 0;
       padding: 1rem;
-      max-width: 600px;
-      margin: auto;
+      display: flex;
+      justify-content: center;
     }
 
     .card {
-      background: white;
-      padding: 1rem;
+      background: #fff;
       border-radius: 12px;
-      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-    }
-
-    h2 {
-      margin-top: 0;
-    }
-
-    img {
-      max-width: 100%;
-      border-radius: 8px;
-    }
-
-    label {
-      display: block;
-      margin-top: 1rem;
-      font-weight: 600;
-    }
-
-    select {
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+      max-width: 900px;
       width: 100%;
-      padding: 0.5rem;
-      margin-top: 0.25rem;
-      border-radius: 6px;
-      border: 1px solid #ccc;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
     }
 
-    .buttons {
+    .card-content {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .image-wrapper {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: #fafafa;
+      width: 100%;
+      padding: 1rem;
+      box-sizing: border-box;
+    }
+
+    .image-wrapper img {
+      width: 90%;
+      max-width: 400px;
+      aspect-ratio: 1 / 1;
+      object-fit: contain;
+      border-radius: 8px;
+      transition: opacity 0.3s ease-in-out;
+    }
+
+    .details {
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .product-header {
       display: flex;
       justify-content: space-between;
-      margin-top: 2rem;
+      align-items: center;
+      margin-bottom: 0.8rem;
     }
 
-    button {
-      padding: 0.75rem 1.5rem;
-      border: none;
-      border-radius: 8px;
-      font-weight: bold;
-      cursor: pointer;
-    }
-
-    .back-btn {
-      background: #e5e7eb;
-      color: #111827;
-    }
-
-    .proceed-btn {
-      background: #22c55e;
-      color: white;
+    .product-title {
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin: 0;
+      color: #222;
+      flex: 1;
     }
 
     .price {
-      margin-top: 1.5rem;
-      font-size: 1.2rem;
-      font-weight: bold;
+      font-size: 1rem;
+      font-weight: 600;
+      color: #000;
+      margin: 0;
+      white-space: nowrap;
+    }
+
+    .section {
+      margin-bottom: 0.6rem;
+    }
+
+    .section h4 {
+      font-size: 0.85rem;
+      margin-bottom: 0.3rem;
+      font-weight: 600;
+      color: #555;
+    }
+
+    .options {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .option-btn {
+      border: 1px solid #ccc;
+      padding: 0.35rem 0.9rem;
+      border-radius: 6px;
+      background: #fff;
+      color: #333;
+      cursor: pointer;
+      font-size: 0.85rem;
+      transition: border-color 0.2s, color 0.2s, transform 0.2s, box-shadow 0.2s;
+    }
+
+    .option-btn:hover {
+      border-color: #888;
+      color: #000;
+      transform: scale(1.05);
+    }
+
+    .option-btn.active {
+      border-color: #000;
+      border-width: 2px;
+      color: #000;
+      font-weight: 600;
+      transform: scale(1.08);
+      box-shadow: 0 3px 8px rgba(0,0,0,0.12);
+    }
+
+    .action-buttons {
+      display: flex;
+      gap: 0.8rem;
+      margin-top: 1rem;
+    }
+
+    .btn {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 48px;
+      border-radius: 10px;
+      font-size: 1rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: background 0.3s, color 0.3s, transform 0.2s;
+      box-sizing: border-box;
+      border: none;
+    }
+
+    .btn-back {
+      flex: 0 0 30%;
+      background: #fff;
+      color: #333;
+      border: 1px solid #ccc;
+    }
+
+    .btn-back:hover {
+      background: #f5f5f5;
+      border-color: #aaa;
+    }
+
+    .btn-proceed {
+      flex: 0 0 70%;
+      background: #000;
+      color: #fff;
+      padding: 0 20px;
+      cursor: not-allowed;
+      opacity: 0.5;
+    }
+
+    .btn-proceed.enabled {
+      cursor: pointer;
+      opacity: 1;
+    }
+
+    .btn-proceed.enabled:hover {
+      background: #222;
+      transform: scale(1.02);
+    }
+
+    @media(min-width: 768px) {
+      .card-content {
+        flex-direction: row;
+      }
+
+      .image-wrapper {
+        width: 50%;
+        border-right: 1px solid #eee;
+        padding: 1.5rem;
+      }
+
+      .image-wrapper img {
+        width: 100%;
+        max-width: 100%;
+        aspect-ratio: 1 / 1;
+      }
+
+      .details {
+        width: 50%;
+        padding: 1.5rem;
+      }
     }
   </style>
 </head>
 <body>
-
   <div class="card">
-    <h2 id="productName">Product Name</h2>
-    <img id="productImage" src="" alt="Product Image"/>
-    <p id="basePriceText">Base Price: RM0</p>
+    <div class="card-content">
+      <div class="image-wrapper">
+        <img id="productImage" src="#" alt="Product Image"/>
+      </div>
+      <div class="details">
+        <div class="product-header">
+          <h1 class="product-title" id="productName"></h1>
+          <p class="price">RM <span id="price">0.00</span></p>
+        </div>
 
-    <label for="materialSelect">Material</label>
-    <select id="materialSelect"></select>
+        <div class="section">
+          <h4>Material</h4>
+          <div class="options" id="materialOptions"></div>
+        </div>
 
-    <label for="colorSelect">Color</label>
-    <select id="colorSelect"></select>
+        <div class="section" id="colorSection" style="display:none;">
+          <h4>Color</h4>
+          <div class="options" id="colorOptions"></div>
+        </div>
 
-    <label for="hingeSelect">Door Hinge</label>
-    <select id="hingeSelect">
-      <option value="">None</option>
-    </select>
+        <div class="section" id="hingesSection" style="display:none;">
+          <h4>Door Hinges</h4>
+          <div class="options" id="hingesOptions"></div>
+        </div>
 
-    <label for="drawerSelect">Drawer Slide</label>
-    <select id="drawerSelect">
-      <option value="">None</option>
-    </select>
+        <div class="section" id="slidesSection" style="display:none;">
+          <h4>Drawer Slides</h4>
+          <div class="options" id="slidesOptions"></div>
+        </div>
 
-    <div class="price" id="totalPrice">Total: RM0</div>
-
-    <div class="buttons">
-      <button class="back-btn" onclick="goBack()">Back</button>
-      <button class="proceed-btn" onclick="proceedToWhatsApp()">Proceed</button>
+        <div class="action-buttons">
+          <a href="our-products.html" class="btn btn-back">&larr; Back</a>
+          <a id="whatsappBtn" class="btn btn-proceed" href="#" target="_blank">Proceed to Order</a>
+        </div>
+      </div>
     </div>
   </div>
 
   <script>
-    let product = JSON.parse(localStorage.getItem('selectedProduct'));
-    let options = {};
-    let total = 0;
+    const urlParams = new URLSearchParams(window.location.search);
+    const productId = urlParams.get('id');
+    let productData = null;
+    let optionsData = null;
 
-    if (!product) {
-      alert('No product selected.');
-      window.location.href = 'our-products.html';
+    let selectedMaterial = null;
+    let selectedColor = null;
+    let selectedHinge = null;
+    let selectedSlide = null;
+
+    async function fetchData() {
+      const productRes = await fetch('products.json');
+      const optionsRes = await fetch('options.json');
+      const products = await productRes.json();
+      optionsData = await optionsRes.json();
+
+      productData = products.find(p => p.id === productId);
+      if (!productData) {
+        document.querySelector('.details').innerHTML = '<p>Product not found.</p>';
+        return;
+      }
+
+      renderProduct();
     }
 
-    const productName = document.getElementById('productName');
-    const productImage = document.getElementById('productImage');
-    const basePriceText = document.getElementById('basePriceText');
+    function renderProduct() {
+      document.getElementById('productName').textContent = productData.name;
+      document.getElementById('productImage').src = Object.values(productData.images)[0];
 
-    productName.textContent = product.name;
-    productImage.src = product.image || '';
-    basePriceText.textContent = `Base Price: RM${product.basePrice}`;
+      renderMaterialOptions();
+      if (productData.doorHinges) renderHinges();
+      if (productData.drawerSlides) renderSlides();
 
-    fetch('options.json')
-      .then(res => res.json())
-      .then(data => {
-        options = data;
-        populateMaterialSelect();
-        populateExtraOptions();
-        updateTotal();
+      setDefaultSelections();
+      updatePrice();
+      validateProceedButton();
+    }
+
+    function renderMaterialOptions() {
+      const container = document.getElementById('materialOptions');
+      container.innerHTML = '';
+      Object.keys(productData.materials).forEach(material => {
+        const btn = document.createElement('button');
+        btn.textContent = material;
+        btn.className = 'option-btn';
+        btn.onclick = () => {
+          selectedMaterial = material;
+          highlightSelection(container, btn);
+          renderColorOptions(material);
+          selectedColor = null;
+          updatePrice();
+          validateProceedButton();
+        };
+        container.appendChild(btn);
       });
-
-    function populateMaterialSelect() {
-      const materialSelect = document.getElementById('materialSelect');
-      materialSelect.innerHTML = '';
-
-      if (product.melamineChipboardUsed) {
-        let opt = document.createElement('option');
-        opt.value = 'melamine chipboard';
-        opt.textContent = 'Melamine Chipboard';
-        materialSelect.appendChild(opt);
-      }
-
-      if (product.blockboardUsed && product.formicaUsed) {
-        let opt = document.createElement('option');
-        opt.value = 'blockboard+formica';
-        opt.textContent = 'Blockboard + Formica';
-        materialSelect.appendChild(opt);
-      }
-
-      materialSelect.onchange = populateColorSelect;
-      populateColorSelect(); // Initial
     }
 
-    function populateColorSelect() {
-      const material = document.getElementById('materialSelect').value;
-      const colorSelect = document.getElementById('colorSelect');
-      colorSelect.innerHTML = '';
+    function renderColorOptions(material) {
+      const container = document.getElementById('colorOptions');
+      container.innerHTML = '';
+      document.getElementById('colorSection').style.display = 'block';
 
-      let colorList = [];
-
-      if (material === 'melamine chipboard') {
-        colorList = product.colors ? Object.keys(product.colors) : [];
-      } else if (material === 'blockboard+formica') {
-        colorList = product.formicaColors ? Object.keys(product.formicaColors) : [];
-      }
-
-      colorList.forEach(color => {
-        let opt = document.createElement('option');
-        opt.value = color;
-        opt.textContent = color.charAt(0).toUpperCase() + color.slice(1);
-        colorSelect.appendChild(opt);
+      const colors = productData.materials[material].colors;
+      Object.keys(colors).forEach(color => {
+        const btn = document.createElement('button');
+        btn.textContent = color;
+        btn.className = 'option-btn';
+        btn.onclick = () => {
+          selectedColor = color;
+          highlightSelection(container, btn);
+          updatePrice();
+          updateMainImage(color);
+          validateProceedButton();
+        };
+        container.appendChild(btn);
       });
-
-      colorSelect.onchange = () => {
-        updateImage();
-        updateTotal();
-      };
-
-      // Trigger update on first color
-      if (colorList.length > 0) {
-        colorSelect.value = colorList[0];
-        updateImage();
-      }
-
-      updateTotal();
     }
 
-    function updateImage() {
-      const material = document.getElementById('materialSelect').value;
-      const color = document.getElementById('colorSelect').value;
-      let imageUrl = product.image;
-
-      if (material === 'melamine chipboard' && product.colors && product.colors[color]) {
-        imageUrl = product.colors[color];
-      } else if (material === 'blockboard+formica' && product.formicaColors && product.formicaColors[color]) {
-        imageUrl = product.formicaColors[color];
-      }
-
-      productImage.src = imageUrl || product.image;
-    }
-
-    function populateExtraOptions() {
-      const hinge = document.getElementById('hingeSelect');
-      const drawer = document.getElementById('drawerSelect');
-
-      Object.entries(options.doorHinges).forEach(([key, value]) => {
-        let opt = document.createElement('option');
-        opt.value = key;
-        opt.textContent = `${key} (+RM${value})`;
-        hinge.appendChild(opt);
+    function renderHinges() {
+      const container = document.getElementById('hingesOptions');
+      document.getElementById('hingesSection').style.display = 'block';
+      Object.keys(optionsData.doorHinges).forEach(type => {
+        const totalPrice = optionsData.doorHinges[type] * productData.doorHinges.quantity;
+        const btn = document.createElement('button');
+        btn.textContent = `${type} ×${productData.doorHinges.quantity} (RM${totalPrice})`;
+        btn.className = 'option-btn';
+        btn.onclick = () => {
+          selectedHinge = type;
+          highlightSelection(container, btn);
+          updatePrice();
+          validateProceedButton();
+        };
+        container.appendChild(btn);
       });
-
-      Object.entries(options.drawerSlides).forEach(([key, value]) => {
-        let opt = document.createElement('option');
-        opt.value = key;
-        opt.textContent = `${key} (+RM${value})`;
-        drawer.appendChild(opt);
-      });
-
-      hinge.onchange = updateTotal;
-      drawer.onchange = updateTotal;
     }
 
-    function updateTotal() {
-      const material = document.getElementById('materialSelect').value;
-      const color = document.getElementById('colorSelect').value;
-      const hinge = document.getElementById('hingeSelect').value;
-      const drawer = document.getElementById('drawerSelect').value;
+    function renderSlides() {
+      const container = document.getElementById('slidesOptions');
+      document.getElementById('slidesSection').style.display = 'block';
+      Object.keys(optionsData.drawerSlides).forEach(type => {
+        const totalPrice = optionsData.drawerSlides[type] * productData.drawerSlides.quantity;
+        const btn = document.createElement('button');
+        btn.textContent = `${type} ×${productData.drawerSlides.quantity} (RM${totalPrice})`;
+        btn.className = 'option-btn';
+        btn.onclick = () => {
+          selectedSlide = type;
+          highlightSelection(container, btn);
+          updatePrice();
+          validateProceedButton();
+        };
+        container.appendChild(btn);
+      });
+    }
 
-      let totalPrice = product.basePrice;
+    function highlightSelection(container, btn) {
+      container.querySelectorAll('.option-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    }
 
-      if (material === 'melamine chipboard') {
-        const colorPrice = options.materials['melamine chipboard'].colors[color] || 0;
-        totalPrice += colorPrice;
-      } else if (material === 'blockboard+formica') {
-        const colorPrice = options.materials['formica'].colors[color] || 0;
-        const blockboardPrice = options.materials['blockboard'].typePrice || 0;
-        totalPrice += colorPrice + blockboardPrice;
+    function setDefaultSelections() {
+      const firstMaterial = Object.keys(productData.materials)[0];
+      selectedMaterial = firstMaterial;
+      document.querySelector(`#materialOptions .option-btn`).classList.add('active');
+      renderColorOptions(firstMaterial);
+      const firstColor = Object.keys(productData.materials[firstMaterial].colors)[0];
+      selectedColor = firstColor;
+      document.querySelector(`#colorOptions .option-btn`).classList.add('active');
+      updateMainImage(firstColor);
+
+      if (productData.doorHinges) {
+        selectedHinge = Object.keys(optionsData.doorHinges)[0];
+        document.querySelector(`#hingesOptions .option-btn`).classList.add('active');
       }
 
-      if (hinge) totalPrice += options.doorHinges[hinge] || 0;
-      if (drawer) totalPrice += options.drawerSlides[drawer] || 0;
-
-      total = totalPrice;
-      document.getElementById('totalPrice').textContent = `Total: RM${total}`;
+      if (productData.drawerSlides) {
+        selectedSlide = Object.keys(optionsData.drawerSlides)[0];
+        document.querySelector(`#slidesOptions .option-btn`).classList.add('active');
+      }
     }
 
-    function goBack() {
-      window.location.href = 'our-products.html';
-    }
+    function updatePrice() {
+      if (!selectedMaterial || !selectedColor) return;
 
-    function proceedToWhatsApp() {
-      const material = document.getElementById('materialSelect').value;
-      const color = document.getElementById('colorSelect').value;
-      const hinge = document.getElementById('hingeSelect').value || 'None';
-      const drawer = document.getElementById('drawerSelect').value || 'None';
+      const materialPrice = optionsData.materials[selectedMaterial].price;
+      const materialPercentage = productData.materials[selectedMaterial].percentage;
+      const colorPrice = optionsData.materials[selectedMaterial].colors[selectedColor];
+      const colorPercentage = productData.materials[selectedMaterial].colors[selectedColor].percentage;
 
-      const message = `
-Hi, I would like to order:
+      let total = (materialPrice * materialPercentage / 100) + (colorPrice * colorPercentage / 100);
 
-Product: ${product.name}
-Material: ${material}
-Color: ${color}
-Door Hinge: ${hinge}
-Drawer Slide: ${drawer}
-Total Price: RM${total}
-      `.trim();
+      if (productData.doorHinges && selectedHinge) {
+        total += optionsData.doorHinges[selectedHinge] * productData.doorHinges.quantity;
+      }
 
+      if (productData.drawerSlides && selectedSlide) {
+        total += optionsData.drawerSlides[selectedSlide] * productData.drawerSlides.quantity;
+      }
+
+      document.getElementById('price').textContent = total.toFixed(2);
+
+      const message = `Hi, I want to order ${productData.name}.\nMaterial: ${selectedMaterial}\nColor: ${selectedColor}\nHinges: ${selectedHinge || 'N/A'}\nSlides: ${selectedSlide || 'N/A'}\nPrice: RM ${total.toFixed(2)}`;
       const encodedMessage = encodeURIComponent(message);
-      const whatsappUrl = `https://wa.me/601111213149?text=${encodedMessage}`;
-            window.open(whatsappUrl, '_blank');
+      document.getElementById('whatsappBtn').href = `https://wa.me/60123456789?text=${encodedMessage}`;
     }
-  </script>
 
+    function updateMainImage(color) {
+      const img = productData.images[color] || Object.values(productData.images)[0];
+      const imageElement = document.getElementById('productImage');
+      imageElement.style.opacity = 0;
+      setTimeout(() => {
+        imageElement.src = img;
+        imageElement.style.opacity = 1;
+      }, 200);
+    }
+
+    function validateProceedButton() {
+      const proceedBtn = document.getElementById('whatsappBtn');
+      const hingeRequired = productData.doorHinges ? !!selectedHinge : true;
+      const slideRequired = productData.drawerSlides ? !!selectedSlide : true;
+
+      if (selectedMaterial && selectedColor && hingeRequired && slideRequired) {
+        proceedBtn.classList.add('enabled');
+        proceedBtn.removeAttribute('disabled');
+      } else {
+        proceedBtn.classList.remove('enabled');
+        proceedBtn.setAttribute('disabled', 'true');
+      }
+    }
+
+    fetchData();
+  </script>
 </body>
 </html>
-
