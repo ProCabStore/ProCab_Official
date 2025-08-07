@@ -26,7 +26,17 @@
         "oak": 299,
         "navy blue": 399
       }
+    },
+    "plywood": {
+      "price": 50,
+      "colors": {
+        "white": 99,
+        "black": 199,
+        "oak": 299,
+        "navy blue": 399
+      }
     }
+    
   },
   "doorHinges": {
     "normal": 10,
@@ -37,5 +47,3 @@
     "soft close": 29
   }
 }
-
-
