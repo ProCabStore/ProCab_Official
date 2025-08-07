@@ -36,5 +36,179 @@
       "green sage": "Enscape_2025-08-03-20-22-20.png",
       "navy blue": "images/wardrobe_navy_blue.png"
     }
+  },
+  {
+    "id": "product2",
+    "name": "Modern Desk",
+    "category": "desk",
+    "materials": {
+      "plywood": {
+        "percentage": 80,
+        "colors": {
+          "white": { "percentage": 80 },
+          "oak": { "percentage": 80 }
+        }
+      }
+    },
+    "drawerSlides": {
+      "quantity": 2
+    },
+    "images": {
+      "white": "images/desk_white.png",
+      "oak": "images/desk_oak.png"
+    }
+  },
+  {
+    "id": "product3",
+    "name": "Side Table with Shelf",
+    "category": "side table",
+    "materials": {
+      "melamine chipboard": {
+        "percentage": 65,
+        "colors": {
+          "oak": { "percentage": 65 },
+          "white": { "percentage": 65 }
+        }
+      }
+    },
+    "images": {
+      "oak": "images/side_table_oak.png",
+      "white": "images/side_table_white.png"
+    }
+  },
+  {
+    "id": "product4",
+    "name": "Minimalist Bed Frame",
+    "category": "bed frame",
+    "materials": {
+      "blockboard": {
+        "percentage": 75,
+        "colors": {
+          "black": { "percentage": 75 },
+          "oak": { "percentage": 75 }
+        }
+      }
+    },
+    "images": {
+      "black": "images/bed_frame_black.png",
+      "oak": "images/bed_frame_oak.png"
+    }
+  },
+  {
+    "id": "product5",
+    "name": "TV Cabinet Low Profile",
+    "category": "tv cabinet",
+    "materials": {
+      "melamine chipboard": {
+        "percentage": 60,
+        "colors": {
+          "white": { "percentage": 60 },
+          "navy blue": { "percentage": 60 }
+        }
+      }
+    },
+    "images": {
+      "white": "images/tv_cabinet_white.png",
+      "navy blue": "images/tv_cabinet_navy_blue.png"
+    }
+  },
+  {
+    "id": "product6",
+    "name": "Shoe Rack Compact",
+    "category": "shoe rack",
+    "materials": {
+      "plywood": {
+        "percentage": 55,
+        "colors": {
+          "green sage": { "percentage": 55 },
+          "white": { "percentage": 55 }
+        }
+      }
+    },
+    "images": {
+      "green sage": "images/shoe_rack_green_sage.png",
+      "white": "images/shoe_rack_white.png"
+    }
+  },
+  {
+    "id": "product7",
+    "name": "Bookshelf Tower",
+    "category": "bookshelf",
+    "materials": {
+      "blockboard": {
+        "percentage": 70,
+        "colors": {
+          "oak": { "percentage": 70 },
+          "black": { "percentage": 70 }
+        }
+      }
+    },
+    "images": {
+      "oak": "images/bookshelf_oak.png",
+      "black": "images/bookshelf_black.png"
+    }
+  },
+  {
+    "id": "product8",
+    "name": "Dressing Table",
+    "category": "desk",
+    "materials": {
+      "melamine chipboard": {
+        "percentage": 60,
+        "colors": {
+          "white": { "percentage": 60 },
+          "green sage": { "percentage": 60 }
+        }
+      }
+    },
+    "drawerSlides": {
+      "quantity": 1
+    },
+    "images": {
+      "white": "images/dressing_table_white.png",
+      "green sage": "images/dressing_table_green_sage.png"
+    }
+  },
+  {
+    "id": "product9",
+    "name": "Wardrobe Sliding Door",
+    "category": "wardrobe",
+    "materials": {
+      "blockboard": {
+        "percentage": 80,
+        "colors": {
+          "black": { "percentage": 80 },
+          "navy blue": { "percentage": 80 }
+        }
+      }
+    },
+    "drawerSlides": {
+      "quantity": 2
+    },
+    "images": {
+      "black": "images/wardrobe_sliding_black.png",
+      "navy blue": "images/wardrobe_sliding_navy.png"
+    }
+  },
+  {
+    "id": "product10",
+    "name": "Side Table with Drawer",
+    "category": "side table",
+    "materials": {
+      "melamine chipboard": {
+        "percentage": 65,
+        "colors": {
+          "white": { "percentage": 65 },
+          "oak": { "percentage": 65 }
+        }
+      }
+    },
+    "drawerSlides": {
+      "quantity": 1
+    },
+    "images": {
+      "white": "images/side_table_drawer_white.png",
+      "oak": "images/side_table_drawer_oak.png"
+    }
   }
 ]
