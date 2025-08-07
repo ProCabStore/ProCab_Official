@@ -236,198 +236,223 @@
     </div>
   </div>
 
-  <script>
-    const urlParams = new URLSearchParams(window.location.search);
-    const productId = urlParams.get('id');
-    let productData = null;
-    let optionsData = null;
+  <!-- 👇 [Unchanged HEAD, BODY, STYLES, HTML STRUCTURE ABOVE] -->
 
-    let selectedMaterial = null;
-    let selectedColor = null;
-    let selectedHinge = null;
-    let selectedSlide = null;
+<script>
+  const urlParams = new URLSearchParams(window.location.search);
+  const productId = urlParams.get('id');
+  let productData = null;
+  let optionsData = null;
 
-    async function fetchData() {
-      const productRes = await fetch('products.json');
-      const optionsRes = await fetch('options.json');
-      const products = await productRes.json();
-      optionsData = await optionsRes.json();
+  let selectedMaterial = null;
+  let selectedColor = null;
+  let selectedHinge = null;
+  let selectedSlide = null;
 
-      productData = products.find(p => p.id === productId);
-      if (!productData) {
-        document.querySelector('.details').innerHTML = '<p>Product not found.</p>';
-        return;
+  async function fetchData() {
+    const productRes = await fetch('products.json');
+    const optionsRes = await fetch('options.json');
+    const products = await productRes.json();
+    optionsData = await optionsRes.json();
+
+    productData = products.find(p => p.id === productId);
+    if (!productData) {
+      document.querySelector('.details').innerHTML = '<p>Product not found.</p>';
+      return;
+    }
+
+    renderProduct();
+  }
+
+  function renderProduct() {
+    document.getElementById('productName').textContent = productData.name;
+    document.getElementById('productImage').src = Object.values(productData.images)[0];
+
+    renderMaterialOptions();
+    if (productData.doorHinges) renderHinges();
+    if (productData.drawerSlides) renderSlides();
+
+    setDefaultSelections();
+    updatePrice();
+    validateProceedButton();
+  }
+
+  function renderMaterialOptions() {
+    const container = document.getElementById('materialOptions');
+    container.innerHTML = '';
+    Object.keys(productData.materials).forEach(material => {
+      const btn = document.createElement('button');
+      btn.textContent = material;
+      btn.className = 'option-btn';
+      btn.onclick = () => {
+        selectedMaterial = material;
+        highlightSelection(container, btn);
+
+        const colors = productData.materials[material].colors;
+        const availableColors = Object.keys(colors);
+
+        // 👇 NEW LOGIC TO RETAIN SELECTED COLOR IF STILL AVAILABLE
+        let colorToSelect;
+        if (selectedColor && availableColors.includes(selectedColor)) {
+          colorToSelect = selectedColor;
+        } else {
+          colorToSelect = availableColors[0];
+        }
+
+        selectedColor = colorToSelect;
+        renderColorOptions(material, colorToSelect);
+
+        updatePrice();
+        updateMainImage(selectedColor);
+        validateProceedButton();
+      };
+      container.appendChild(btn);
+    });
+  }
+
+  function renderColorOptions(material, preselectColor = null) {
+    const container = document.getElementById('colorOptions');
+    container.innerHTML = '';
+    document.getElementById('colorSection').style.display = 'block';
+
+    const colors = productData.materials[material].colors;
+    Object.keys(colors).forEach((color) => {
+      const btn = document.createElement('button');
+      btn.textContent = color;
+      btn.className = 'option-btn';
+      btn.onclick = () => {
+        selectedColor = color;
+        highlightSelection(container, btn);
+        updatePrice();
+        updateMainImage(color);
+        validateProceedButton();
+      };
+      container.appendChild(btn);
+
+      if (color === preselectColor) {
+        setTimeout(() => btn.click(), 0); // trigger after appending
       }
+    });
+  }
 
-      renderProduct();
+  function renderHinges() {
+    const container = document.getElementById('hingesOptions');
+    document.getElementById('hingesSection').style.display = 'block';
+    const hingeValues = optionsData.doorHinges;
+    const cheapest = Math.min(...Object.values(hingeValues));
+    Object.keys(hingeValues).forEach(type => {
+      const base = hingeValues[type];
+      const extraCost = base - cheapest;
+      const btn = document.createElement('button');
+      btn.textContent = extraCost > 0 ? `${type} (+RM${(extraCost * productData.doorHinges.quantity)})` : `${type}`;
+      btn.className = 'option-btn';
+      btn.onclick = () => {
+        selectedHinge = type;
+        highlightSelection(container, btn);
+        updatePrice();
+        validateProceedButton();
+      };
+      container.appendChild(btn);
+    });
+  }
+
+  function renderSlides() {
+    const container = document.getElementById('slidesOptions');
+    document.getElementById('slidesSection').style.display = 'block';
+    const slideValues = optionsData.drawerSlides;
+    const cheapest = Math.min(...Object.values(slideValues));
+    Object.keys(slideValues).forEach(type => {
+      const base = slideValues[type];
+      const extraCost = base - cheapest;
+      const btn = document.createElement('button');
+      btn.textContent = extraCost > 0 ? `${type} (+RM${(extraCost * productData.drawerSlides.quantity)})` : `${type}`;
+      btn.className = 'option-btn';
+      btn.onclick = () => {
+        selectedSlide = type;
+        highlightSelection(container, btn);
+        updatePrice();
+        validateProceedButton();
+      };
+      container.appendChild(btn);
+    });
+  }
+
+  function highlightSelection(container, btn) {
+    container.querySelectorAll('.option-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+  }
+
+  function setDefaultSelections() {
+    const firstMaterial = Object.keys(productData.materials)[0];
+    selectedMaterial = firstMaterial;
+    document.querySelector(`#materialOptions .option-btn`).classList.add('active');
+    const firstColor = Object.keys(productData.materials[firstMaterial].colors)[0];
+    selectedColor = firstColor;
+    renderColorOptions(firstMaterial, firstColor);
+    updateMainImage(firstColor);
+
+    if (productData.doorHinges) {
+      selectedHinge = Object.keys(optionsData.doorHinges)[0];
+      document.querySelector(`#hingesOptions .option-btn`).classList.add('active');
     }
 
-    function renderProduct() {
-      document.getElementById('productName').textContent = productData.name;
-      document.getElementById('productImage').src = Object.values(productData.images)[0];
+    if (productData.drawerSlides) {
+      selectedSlide = Object.keys(optionsData.drawerSlides)[0];
+      document.querySelector(`#slidesOptions .option-btn`).classList.add('active');
+    }
+  }
 
-      renderMaterialOptions();
-      if (productData.doorHinges) renderHinges();
-      if (productData.drawerSlides) renderSlides();
+  function updatePrice() {
+    if (!selectedMaterial || !selectedColor) return;
 
-      setDefaultSelections();
-      updatePrice();
-      validateProceedButton();
+    const materialPrice = optionsData.materials[selectedMaterial].price;
+    const materialPercentage = productData.materials[selectedMaterial].percentage;
+    const colorPrice = optionsData.materials[selectedMaterial].colors[selectedColor];
+    const colorPercentage = productData.materials[selectedMaterial].colors[selectedColor].percentage;
+
+    let total = (materialPrice * materialPercentage / 100) + (colorPrice * colorPercentage / 100);
+
+    if (productData.doorHinges && selectedHinge) {
+      total += optionsData.doorHinges[selectedHinge] * productData.doorHinges.quantity;
     }
 
-    function renderMaterialOptions() {
-      const container = document.getElementById('materialOptions');
-      container.innerHTML = '';
-      Object.keys(productData.materials).forEach(material => {
-        const btn = document.createElement('button');
-        btn.textContent = material;
-        btn.className = 'option-btn';
-        btn.onclick = () => {
-          selectedMaterial = material;
-          highlightSelection(container, btn);
-          renderColorOptions(material);
-          selectedColor = null;
-          updatePrice();
-          validateProceedButton();
-        };
-        container.appendChild(btn);
-      });
+    if (productData.drawerSlides && selectedSlide) {
+      total += optionsData.drawerSlides[selectedSlide] * productData.drawerSlides.quantity;
     }
 
-    function renderColorOptions(material) {
-      const container = document.getElementById('colorOptions');
-      container.innerHTML = '';
-      document.getElementById('colorSection').style.display = 'block';
+    document.getElementById('price').textContent = total.toFixed(2);
 
-      const colors = productData.materials[material].colors;
-      Object.keys(colors).forEach(color => {
-        const btn = document.createElement('button');
-        btn.textContent = color;
-        btn.className = 'option-btn';
-        btn.onclick = () => {
-          selectedColor = color;
-          highlightSelection(container, btn);
-          updatePrice();
-          updateMainImage(color);
-          validateProceedButton();
-        };
-        container.appendChild(btn);
-      });
+    const message = `Hi, I want to order ${productData.name}.\nMaterial: ${selectedMaterial}\nColor: ${selectedColor}\nHinges: ${selectedHinge || 'N/A'}\nSlides: ${selectedSlide || 'N/A'}\nPrice: RM ${total.toFixed(2)}`;
+    const encodedMessage = encodeURIComponent(message);
+    document.getElementById('whatsappBtn').href = `https://wa.me/60123456789?text=${encodedMessage}`;
+  }
+
+  function updateMainImage(color) {
+    const img = productData.images[color] || Object.values(productData.images)[0];
+    const imageElement = document.getElementById('productImage');
+    imageElement.style.opacity = 0;
+    setTimeout(() => {
+      imageElement.src = img;
+      imageElement.style.opacity = 1;
+    }, 200);
+  }
+
+  function validateProceedButton() {
+    const proceedBtn = document.getElementById('whatsappBtn');
+    const hingeRequired = productData.doorHinges ? !!selectedHinge : true;
+    const slideRequired = productData.drawerSlides ? !!selectedSlide : true;
+
+    if (selectedMaterial && selectedColor && hingeRequired && slideRequired) {
+      proceedBtn.classList.add('enabled');
+      proceedBtn.removeAttribute('disabled');
+    } else {
+      proceedBtn.classList.remove('enabled');
+      proceedBtn.setAttribute('disabled', 'true');
     }
+  }
 
-    function renderHinges() {
-      const container = document.getElementById('hingesOptions');
-      document.getElementById('hingesSection').style.display = 'block';
-      Object.keys(optionsData.doorHinges).forEach(type => {
-        const totalPrice = optionsData.doorHinges[type] * productData.doorHinges.quantity;
-        const btn = document.createElement('button');
-        btn.textContent = `${type} ×${productData.doorHinges.quantity} (RM${totalPrice})`;
-        btn.className = 'option-btn';
-        btn.onclick = () => {
-          selectedHinge = type;
-          highlightSelection(container, btn);
-          updatePrice();
-          validateProceedButton();
-        };
-        container.appendChild(btn);
-      });
-    }
+  fetchData();
+</script>
 
-    function renderSlides() {
-      const container = document.getElementById('slidesOptions');
-      document.getElementById('slidesSection').style.display = 'block';
-      Object.keys(optionsData.drawerSlides).forEach(type => {
-        const totalPrice = optionsData.drawerSlides[type] * productData.drawerSlides.quantity;
-        const btn = document.createElement('button');
-        btn.textContent = `${type} ×${productData.drawerSlides.quantity} (RM${totalPrice})`;
-        btn.className = 'option-btn';
-        btn.onclick = () => {
-          selectedSlide = type;
-          highlightSelection(container, btn);
-          updatePrice();
-          validateProceedButton();
-        };
-        container.appendChild(btn);
-      });
-    }
-
-    function highlightSelection(container, btn) {
-      container.querySelectorAll('.option-btn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-    }
-
-    function setDefaultSelections() {
-      const firstMaterial = Object.keys(productData.materials)[0];
-      selectedMaterial = firstMaterial;
-      document.querySelector(`#materialOptions .option-btn`).classList.add('active');
-      renderColorOptions(firstMaterial);
-      const firstColor = Object.keys(productData.materials[firstMaterial].colors)[0];
-      selectedColor = firstColor;
-      document.querySelector(`#colorOptions .option-btn`).classList.add('active');
-      updateMainImage(firstColor);
-
-      if (productData.doorHinges) {
-        selectedHinge = Object.keys(optionsData.doorHinges)[0];
-        document.querySelector(`#hingesOptions .option-btn`).classList.add('active');
-      }
-
-      if (productData.drawerSlides) {
-        selectedSlide = Object.keys(optionsData.drawerSlides)[0];
-        document.querySelector(`#slidesOptions .option-btn`).classList.add('active');
-      }
-    }
-
-    function updatePrice() {
-      if (!selectedMaterial || !selectedColor) return;
-
-      const materialPrice = optionsData.materials[selectedMaterial].price;
-      const materialPercentage = productData.materials[selectedMaterial].percentage;
-      const colorPrice = optionsData.materials[selectedMaterial].colors[selectedColor];
-      const colorPercentage = productData.materials[selectedMaterial].colors[selectedColor].percentage;
-
-      let total = (materialPrice * materialPercentage / 100) + (colorPrice * colorPercentage / 100);
-
-      if (productData.doorHinges && selectedHinge) {
-        total += optionsData.doorHinges[selectedHinge] * productData.doorHinges.quantity;
-      }
-
-      if (productData.drawerSlides && selectedSlide) {
-        total += optionsData.drawerSlides[selectedSlide] * productData.drawerSlides.quantity;
-      }
-
-      document.getElementById('price').textContent = total.toFixed(2);
-
-      const message = `Hi, I want to order ${productData.name}.\nMaterial: ${selectedMaterial}\nColor: ${selectedColor}\nHinges: ${selectedHinge || 'N/A'}\nSlides: ${selectedSlide || 'N/A'}\nPrice: RM ${total.toFixed(2)}`;
-      const encodedMessage = encodeURIComponent(message);
-      document.getElementById('whatsappBtn').href = `https://wa.me/601111213149?text=${encodedMessage}`;
-    }
-
-    function updateMainImage(color) {
-      const img = productData.images[color] || Object.values(productData.images)[0];
-      const imageElement = document.getElementById('productImage');
-      imageElement.style.opacity = 0;
-      setTimeout(() => {
-        imageElement.src = img;
-        imageElement.style.opacity = 1;
-      }, 200);
-    }
-
-    function validateProceedButton() {
-      const proceedBtn = document.getElementById('whatsappBtn');
-      const hingeRequired = productData.doorHinges ? !!selectedHinge : true;
-      const slideRequired = productData.drawerSlides ? !!selectedSlide : true;
-
-      if (selectedMaterial && selectedColor && hingeRequired && slideRequired) {
-        proceedBtn.classList.add('enabled');
-        proceedBtn.removeAttribute('disabled');
-      } else {
-        proceedBtn.classList.remove('enabled');
-        proceedBtn.setAttribute('disabled', 'true');
-      }
-    }
-
-    fetchData();
-  </script>
 </body>
 </html>
-
