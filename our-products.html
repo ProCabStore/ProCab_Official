@@ -2,9 +2,10 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Our Products</title>
   <style>
+    /* CSS unchanged */
     :root {
       --color-background: #ffffff;
       --color-foreground: #f8f9fa;
@@ -34,7 +35,6 @@
       background-color: var(--color-background);
     }
 
-    /* ✅ Category List */
     .category-list {
       display: flex;
       flex-wrap: wrap;
@@ -63,7 +63,6 @@
       border-color: var(--color-primary);
     }
 
-    /* ✅ Product Grid */
     .product-grid {
       display: flex;
       flex-wrap: wrap;
@@ -151,21 +150,17 @@
   </style>
 </head>
 <body>
-  <!-- ✅ Navbar will be loaded here -->
   <div id="navbar-placeholder"></div>
 
-  <!-- ✅ Category List -->
   <div class="category-list" id="categoryList"></div>
+
   <div class="product-grid" id="productGrid"></div>
 
   <script>
-    // ✅ Load navbar dynamically
     fetch('navbar.html')
-      .then(response => response.text())
+      .then(res => res.text())
       .then(data => {
         document.getElementById('navbar-placeholder').innerHTML = data;
-
-        // ✅ After loading navbar, reattach toggle functionality
         const navbarToggle = document.getElementById('navbarToggle');
         const navbarMenu = document.getElementById('navbarMenu');
         if (navbarToggle && navbarMenu) {
@@ -185,62 +180,86 @@
       const optionsRes = await fetch('options.json');
       productsData = await productsRes.json();
       optionsData = await optionsRes.json();
+
       renderCategories(optionsData.categories);
       renderProducts(productsData, optionsData);
     }
 
     function calculateCheapestPrice(product, options) {
-      let cheapestMaterialCost = Infinity;
+      let cheapestTypeCost = Infinity;
 
-      for (const [materialName, materialData] of Object.entries(product.materials)) {
-        const baseMaterialPrice = options.materials[materialName].price;
-        const colorOptions = options.materials[materialName].colors;
+      for (const typeKey of ['type 1', 'type 2']) {
+        if (!product[typeKey]) continue;
 
-        for (const [colorName, colorInfo] of Object.entries(materialData.colors)) {
-          const materialPercentage = materialData.percentage;
-          const colorPercentage = colorInfo.percentage;
-          const colorPrice = colorOptions[colorName];
+        const typeData = product[typeKey];
+        let materialSum = 0;
+        const colorGroups = [];
 
-          const cost =
-            (baseMaterialPrice * materialPercentage / 100) +
-            (colorPrice * colorPercentage / 100);
-
-          if (cost < cheapestMaterialCost) {
-            cheapestMaterialCost = cost;
+        // Sum all materials for this type
+        for (const [key, value] of Object.entries(typeData)) {
+          if (key.toLowerCase().includes('color')) {
+            colorGroups.push(key);
+            continue;
           }
+          const basePrice = options[key]?.price ?? 0;
+          const percentage = value.price?.percentage ?? 100;
+          materialSum += (basePrice * percentage) / 100;
+        }
+
+        // Find cheapest color cost multiplied by its percentage
+        let cheapestColorCost = Infinity;
+        for (const colorGroupName of colorGroups) {
+          const colors = typeData[colorGroupName];
+          const baseColorPrices = options.colors?.[colorGroupName] || {};
+
+          for (const [colorName, colorData] of Object.entries(colors)) {
+            const baseColorPrice = baseColorPrices[colorName] ?? 0;
+            const colorPercentage = colorData.percentage ?? 100;
+            const colorCost = (baseColorPrice * colorPercentage) / 100;
+            if (colorCost < cheapestColorCost) {
+              cheapestColorCost = colorCost;
+            }
+          }
+        }
+        if (cheapestColorCost === Infinity) cheapestColorCost = 0;
+
+        const totalTypeCost = materialSum + cheapestColorCost;
+
+        if (totalTypeCost < cheapestTypeCost) {
+          cheapestTypeCost = totalTypeCost;
         }
       }
 
       let hingeCost = 0;
-      if (product.doorHinges && product.doorHinges.quantity > 0) {
-        const cheapestHinge = Math.min(...Object.values(options.doorHinges));
-        hingeCost = cheapestHinge * product.doorHinges.quantity;
+      if (product.doorHinges?.quantity > 0) {
+        const minHingePrice = Math.min(...Object.values(options.doorHinges));
+        hingeCost = minHingePrice * product.doorHinges.quantity;
       }
 
       let slideCost = 0;
-      if (product.drawerSlides && product.drawerSlides.quantity > 0) {
-        const cheapestSlide = Math.min(...Object.values(options.drawerSlides));
-        slideCost = cheapestSlide * product.drawerSlides.quantity;
+      if (product.drawerSlides?.quantity > 0) {
+        const minSlidePrice = Math.min(...Object.values(options.drawerSlides));
+        slideCost = minSlidePrice * product.drawerSlides.quantity;
       }
 
-      return (cheapestMaterialCost + hingeCost + slideCost).toFixed(2);
+      return (cheapestTypeCost + hingeCost + slideCost).toFixed(2);
     }
 
     function renderCategories(categories) {
-      const categoryContainer = document.getElementById('categoryList');
-      categoryContainer.innerHTML = '';
+      const container = document.getElementById('categoryList');
+      container.innerHTML = '';
 
       const allBtn = document.createElement('button');
       allBtn.textContent = 'All';
       allBtn.classList.add('active');
       allBtn.onclick = () => filterByCategory('all');
-      categoryContainer.appendChild(allBtn);
+      container.appendChild(allBtn);
 
       categories.forEach(cat => {
         const btn = document.createElement('button');
         btn.textContent = cat;
         btn.onclick = () => filterByCategory(cat);
-        categoryContainer.appendChild(btn);
+        container.appendChild(btn);
       });
     }
 
@@ -251,10 +270,11 @@
       const activeBtn = [...buttons].find(btn => btn.textContent.toLowerCase() === (category === 'all' ? 'all' : category.toLowerCase()));
       if (activeBtn) activeBtn.classList.add('active');
 
-      const filteredProducts = category === 'all'
+      const filtered = category === 'all'
         ? productsData
         : productsData.filter(p => p.category.toLowerCase() === category.toLowerCase());
-      renderProducts(filteredProducts, optionsData);
+
+      renderProducts(filtered, optionsData);
     }
 
     function renderProducts(products, options) {
@@ -263,13 +283,19 @@
 
       products.forEach(product => {
         const cheapestPrice = calculateCheapestPrice(product, options);
-        const firstImage = Object.values(product.images)[0] || '#';
+        const firstImage = Object.values(product.images)[0] || 'https://via.placeholder.com/220x180?text=No+Image';
 
-        const colorNames = [];
-        for (const [material, matData] of Object.entries(product.materials)) {
-          colorNames.push(...Object.keys(matData.colors));
-        }
-        const uniqueColors = [...new Set(colorNames)];
+        const colorNames = new Set();
+        ['type 1', 'type 2'].forEach(typeKey => {
+          if (product[typeKey]) {
+            for (const [key, val] of Object.entries(product[typeKey])) {
+              if (key.toLowerCase().includes('color')) {
+                Object.keys(val).forEach(color => colorNames.add(color));
+              }
+            }
+          }
+        });
+        const uniqueColors = Array.from(colorNames);
 
         const colorDisplay = uniqueColors.length > 2
           ? `${uniqueColors.slice(0, 2).join(', ')} +${uniqueColors.length - 2} more`
@@ -296,10 +322,3 @@
   </script>
 </body>
 </html>
-
-
-
-
-
-
-
