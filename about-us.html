@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>About Us - ProCab</title>
+  <style>
+    body {
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      margin: 0;
+      background-color: #fff;
+      color: #333;
+      line-height: 1.5;
+    }
+    main {
+      max-width: 900px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+    }
+    h1 {
+      font-weight: 700;
+      margin-bottom: 1rem;
+    }
+    p {
+      margin-bottom: 1rem;
+    }
+
+    /* Follow Us Section */
+    #follow-us-section {
+      max-width: 900px;
+      margin: 2rem auto;
+      padding: 2rem 1rem;
+      background-color: #f8f9fa;
+      border-radius: 8px;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+      text-align: center;
+      transition: max-width 0.3s ease;
+    }
+
+    #follow-us-section h2 {
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      color: #222;
+      font-size: 1.5rem;
+    }
+
+    #follow-us-section p.description {
+      font-weight: 500;
+      color: #555;
+      margin-bottom: 1.5rem;
+      font-size: 1.1rem;
+    }
+
+    /* Buttons container */
+    #follow-us-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    /* Themed button style */
+    #follow-us-buttons a {
+      display: inline-block;
+      padding: 0.75rem 1.5rem;
+      font-weight: 600;
+      font-size: 1rem;
+      color: #000;
+      background-color: #fff;
+      border: 2px solid #000;
+      border-radius: 6px;
+      text-decoration: none;
+      transition: transform 0.2s ease, background-color 0.2s ease, color 0.2s ease;
+      box-shadow: 0 2px 6px rgb(0 0 0 / 0.1);
+      user-select: none;
+      min-width: 120px;
+      text-align: center;
+    }
+
+    #follow-us-buttons a:hover,
+    #follow-us-buttons a:focus {
+      background-color: #000;
+      color: #fff;
+      transform: scale(1.05);
+      outline: none;
+      box-shadow: 0 4px 12px rgb(0 0 0 / 0.3);
+    }
+
+    /* WhatsApp button - themed green border/text */
+    #follow-us-buttons a.whatsapp {
+      color: #25D366;
+      border-color: #25D366;
+      box-shadow: 0 2px 6px rgba(37, 211, 102, 0.3);
+    }
+
+    #follow-us-buttons a.whatsapp:hover,
+    #follow-us-buttons a.whatsapp:focus {
+      background-color: #25D366;
+      color: #fff;
+      box-shadow: 0 4px 12px rgba(37, 211, 102, 0.6);
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 600px) {
+      #follow-us-section {
+        max-width: 90%;
+        padding: 1.5rem 1rem;
+      }
+
+      #follow-us-buttons {
+        flex-direction: column;
+        gap: 0.5rem;
+        align-items: center;
+      }
+
+      #follow-us-buttons a {
+        width: 100%;
+        max-width: 280px;
+        min-width: unset;
+        padding: 0.5rem 1rem;
+        font-size: 0.9rem;
+      }
+
+      /* Smaller text for Follow Us */
+      #follow-us-section h2 {
+        font-size: 1.2rem;
+      }
+
+      #follow-us-section p.description {
+        font-size: 0.85rem;
+      }
+
+      /* Smaller text for About Us */
+      main {
+        max-width: 90%;
+        margin: 1.5rem auto;
+        padding: 0 1rem;
+      }
+
+      main h1 {
+        font-size: 1.5rem;
+      }
+
+      main p {
+        font-size: 0.9rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar will be injected here -->
+  <div id="navbar-placeholder"></div>
+
+  <!-- Follow Us Section -->
+  <section id="follow-us-section" aria-labelledby="follow-us-heading">
+    <h2 id="follow-us-heading">Follow Us & Stay Updated</h2>
+    <p class="description">Keep updated with our latest news, offers, and product launches by following us on social media or contacting us directly via WhatsApp.</p>
+    <div id="follow-us-buttons">
+      <a href="https://facebook.com/ProCab" target="_blank" rel="noopener noreferrer" aria-label="Follow ProCab on Facebook">Facebook</a>
+      <a href="https://twitter.com/ProCab" target="_blank" rel="noopener noreferrer" aria-label="Follow ProCab on Twitter">Twitter</a>
+      <a href="https://instagram.com/ProCab" target="_blank" rel="noopener noreferrer" aria-label="Follow ProCab on Instagram">Instagram</a>
+      <a href="https://wa.me/60123456789" target="_blank" rel="noopener noreferrer" aria-label="Contact ProCab on WhatsApp" class="whatsapp">WhatsApp</a>
+    </div>
+  </section>
+
+  <main>
+    <h1>About Us</h1>
+    <p>Welcome to ProCab! We specialize in crafting quality cabinetry and furniture designed to bring style and functionality to your home or office.</p>
+    <p>Our team is dedicated to delivering top-notch craftsmanship, sustainable materials, and personalized solutions that meet your unique needs.</p>
+    <p>With years of experience and a passion for design, we strive to create products that enhance your space and stand the test of time.</p>
+  </main>
+
+  <script>
+    // Load navbar.html and inject into #navbar-placeholder
+    fetch('navbar.html')
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.text();
+      })
+      .then(html => {
+        document.getElementById('navbar-placeholder').innerHTML = html;
+
+        // After injecting, add toggle button functionality for hamburger menu
+        const toggleButton = document.getElementById('navbarToggle');
+        const menu = document.getElementById('navbarMenu');
+
+        if(toggleButton && menu) {
+          toggleButton.addEventListener('click', () => {
+            const expanded = toggleButton.getAttribute('aria-expanded') === 'true' || false;
+            toggleButton.setAttribute('aria-expanded', !expanded);
+            toggleButton.classList.toggle('is-active');
+            menu.classList.toggle('is-active');
+          });
+        }
+      })
+      .catch(error => {
+        console.error('Failed to load navbar:', error);
+      });
+  </script>
+
+</body>
+</html>
