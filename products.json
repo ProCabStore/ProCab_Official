@@ -12,10 +12,18 @@
         "price": { "percentage": 15 }
       },
       "formica colors": {
-        "white": { "percentage": 70 },
-        "black": { "percentage": 70 },
-        "oak": { "percentage": 70 },
-        "navy blue": { "percentage": 70 }
+        "white": [
+          { "percentage": 70, "color": "white" }
+        ],
+        "black": [
+          { "percentage": 70, "color": "black" }
+        ],
+        "oak": [
+          { "percentage": 70, "color": "oak" }
+        ],
+        "navy blue": [
+          { "percentage": 70, "color": "navy blue" }
+        ]
       }
     },
 
@@ -27,10 +35,17 @@
         "price": { "percentage": 15 }
       },
       "melamine chipboard 16mm colors": {
-        "white": { "percentage": 70 },
-        "black": { "percentage": 70 },
-        "oak": { "percentage": 70 },
-        "green sage": { "percentage": 70 }
+        "white + white": [
+          { "percentage": 40, "color": "white" },
+          { "percentage": 30, "color": "white" }
+        ],
+        "oak + black": [
+          { "percentage": 60, "color": "oak" },
+          { "percentage": 20, "color": "black" }
+        ],
+        "black": [
+          { "percentage": 70, "color": "black" }
+        ]
       }
     },
 
@@ -44,10 +59,12 @@
 
     "images": {
       "white": "ChatGPT Image Jul 13, 2025, 02_05_43 PM.png",
-      "black": "images/wardrobe_black.png",
-      "oak": "images/wardrobe_oak.png",
+      "black": "ChatGPT Image Jul 13, 2025, 02_05_43 PM.png",
+      "oak": "ChatGPT Image Jul 13, 2025, 02_05_43 PM.png",
       "green sage": "Enscape_2025-08-03-20-22-20.png",
-      "navy blue": "images/wardrobe_navy_blue.png"
+      "navy blue": "ChatGPT Image Jul 13, 2025, 02_05_43 PM.png",
+      "white + white": "Enscape_2025-08-03-20-22-20.png",
+      "oak + black": "Enscape_2025-08-03-20-22-20.png"
     }
   }
 ]
