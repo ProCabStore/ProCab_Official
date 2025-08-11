@@ -359,7 +359,7 @@
 
     const colorsSet = new Set();
     colorGroups.forEach(([_, colorsObj]) => {
-      Object.keys(colorsObj).forEach(color => colorsSet.add(color));
+      Object.keys(colorsObj).forEach(colorKey => colorsSet.add(colorKey));
     });
     return Array.from(colorsSet);
   }
@@ -375,20 +375,20 @@
       return;
     }
 
-    colors.forEach(color => {
+    colors.forEach(colorKey => {
       const btn = document.createElement('button');
-      btn.textContent = color;
+      btn.textContent = colorKey;
       btn.className = 'option-btn';
       btn.onclick = () => {
-        selectedColor = color;
+        selectedColor = colorKey;
         highlightSelection(container, btn);
         updatePrice();
-        updateMainImage(color);
+        updateMainImage(colorKey);
         validateProceedButton();
       };
       container.appendChild(btn);
 
-      if (color === preselectColor) {
+      if (colorKey === preselectColor) {
         setTimeout(() => btn.click(), 0);
       }
     });
@@ -458,43 +458,150 @@
     });
   }
 
+  // ---------- NEW/UPDATED CALCULATION HELPERS & updatePrice() ----------
+  function getMaterialBasePrice(materialKey) {
+    if (!materialKey || !optionsData) return 0;
+    const opt = optionsData[materialKey];
+    if (opt == null) return 0;
+    if (typeof opt === 'object' && typeof opt.price === 'number') return opt.price;
+    if (typeof opt === 'number') return opt;
+    // sometimes optionsData may nest materials under `materials` — try that fallback
+    if (optionsData.materials && optionsData.materials[materialKey]) {
+      const m = optionsData.materials[materialKey];
+      if (typeof m === 'object' && typeof m.price === 'number') return m.price;
+      if (typeof m === 'number') return m;
+    }
+    return 0;
+  }
+
+  function getColorBasePrices(colorGroupName) {
+    if (!colorGroupName || !optionsData) return {};
+    const group = options_data_fallback(colorGroupName);
+    if (group && typeof group === 'object') return group;
+    return {};
+  }
+
+  // fallback helper for options shape used elsewhere (keeps original behavior)
+  function options_data_fallback(colorGroupName) {
+    // Primary: direct key in optionsData
+    if (optionsData[colorGroupName] && typeof optionsData[colorGroupName] === 'object') return optionsData[colorGroupName];
+    // Fallback: sometimes colors grouped under slightly different keys -- try common ones
+    // (We keep this conservative to avoid changing other logic)
+    return optionsData[colorGroupName] || {};
+  }
+
+  function getPercentageFromValue(val) {
+    if (val == null) return 100;
+    if (typeof val === 'object') {
+      if (val.price && typeof val.price.percentage === 'number') return val.price.percentage;
+      if (typeof val.percentage === 'number') return val.percentage;
+    }
+    if (typeof val === 'number') return val;
+    return 100;
+  }
+
+  function getAccessoryUnitPriceFromSelection(accessoryKey, selectedOptionName) {
+    if (!optionsData || !accessoryKey) return 0;
+    const opt = optionsData[accessoryKey];
+    if (!opt) return 0;
+    if (typeof opt === 'number') return opt;
+    if (typeof opt === 'object') {
+      const val = opt[selectedOptionName];
+      if (typeof val === 'number') return val;
+      // fallback to the cheapest numeric option
+      const numeric = Object.values(opt).filter(v => typeof v === 'number');
+      if (numeric.length) return Math.min(...numeric);
+    }
+    return 0;
+  }
+
+  // Compute cost for a color entry (colorVal) in a given colorGroup (baseColorPrices)
+  // colorVal may be:
+  // - array of parts: [{percentage, color}, ...]
+  // - object: {percentage: X} (single color entry; colorName comes from colorKey)
+  // - number: percentage
+  function computeColorEntryCost(colorKey, colorVal, baseColorPrices) {
+    let cost = 0;
+
+    if (Array.isArray(colorVal)) {
+      for (const part of colorVal) {
+        const partPct = getPercentageFromValue(part) / 100;
+        const partColorName = (part && part.color) ? part.color : (colorKey.includes('+') ? colorKey.split('+')[0].trim() : colorKey);
+        const partBase = baseColorPrices[partColorName] != null ? baseColorPrices[partColorName] : 0;
+        cost += partBase * partPct;
+      }
+      return cost;
+    }
+
+    if (typeof colorVal === 'object') {
+      const pct = getPercentageFromValue(colorVal) / 100;
+      const base = baseColorPrices[colorKey] != null ? baseColorPrices[colorKey] : 0;
+      return base * pct;
+    }
+
+    if (typeof colorVal === 'number') {
+      const pct = colorVal / 100;
+      const base = baseColorPrices[colorKey] != null ? baseColorPrices[colorKey] : 0;
+      return base * pct;
+    }
+
+    return 0;
+  }
+
   function updatePrice() {
     if (!selectedType) return;
 
-    const typeData = productData[selectedType];
+    const typeData = productData[selectedType] || {};
 
-    // Sum material costs for ALL materials in selected type
+    // 1) Material costs: sum all non-color entries in the chosen type, applying percentages if provided.
     let materialCost = 0;
-    for(const [material, materialData] of Object.entries(typeData)) {
-      if(material.toLowerCase().includes('color')) continue;
+    for (const [materialKey, materialVal] of Object.entries(typeData)) {
+      if (materialKey.toLowerCase().includes('color')) continue; // skip color groups here
 
-      const basePrice = optionsData.materials?.[material]?.price ?? 0;
-      materialCost += basePrice;
+      // base price lookup
+      const basePrice = getMaterialBasePrice(materialKey);
+      const pct = getPercentageFromValue(materialVal) / 100;
+      materialCost += basePrice * pct;
     }
 
-    // Color cost — assume only one color group, use selected color
+    // 2) Color costs: handle multiple color-groups.
+    // For each color-group inside the chosen type:
+    //  - if selectedColor exists in that group, compute its cost (supports arrays)
+    //  - otherwise pick the cheapest entry in the group (supports arrays)
     let colorCost = 0;
-    const colorGroups = Object.entries(typeData).filter(([key]) => key.toLowerCase().includes('color'));
-    for(const [colorGroupKey, colorsObj] of colorGroups) {
-      const colorData = colorsObj[selectedColor];
-      if (!colorData) continue;
+    const colorGroupEntries = Object.entries(typeData).filter(([k]) => k.toLowerCase().includes('color'));
+    for (const [colorGroupName, colorsObj] of colorGroupEntries) {
+      const baseColorPrices = getColorBasePrices(colorGroupName); // object mapping colorName -> price
 
-      const baseColorPrice = optionsData.colors?.[colorGroupKey]?.[selectedColor] ?? 0;
-      colorCost = baseColorPrice;
-      break; // just use first color group found
+      // If selectedColor exists and present in this group, use it
+      if (selectedColor && colorsObj[selectedColor]) {
+        const selColorVal = colorsObj[selectedColor];
+        colorCost += computeColorEntryCost(selectedColor, selColorVal, baseColorPrices);
+        continue;
+      }
+
+      // Otherwise choose cheapest entry in this group
+      let cheapestInGroup = Infinity;
+      for (const [colorKey, colorVal] of Object.entries(colorsObj)) {
+        const cost = computeColorEntryCost(colorKey, colorVal, baseColorPrices);
+        if (cost < cheapestInGroup) cheapestInGroup = cost;
+      }
+      if (cheapestInGroup === Infinity) cheapestInGroup = 0;
+      colorCost += cheapestInGroup;
     }
 
-    let totalPrice = materialCost + colorCost;
-
-    // Add accessory costs
-    for(const [accKey, accType] of Object.entries(selectedAccessories)) {
-      const accBasePrice = optionsData[accKey]?.[accType] ?? 0;
-      const accQty = productData[accKey]?.quantity ?? 1;
-      totalPrice += accBasePrice * accQty;
+    // 3) Accessories: selectedAccessories maps accessoryKey -> selected option name (e.g., "normal")
+    let accessoriesTotal = 0;
+    for (const [accKey, accSelectedOptionName] of Object.entries(selectedAccessories)) {
+      const qty = (productData[accKey] && productData[accKey].quantity) ? Number(productData[accKey].quantity) : 1;
+      const unit = getAccessoryUnitPriceFromSelection(accKey, accSelectedOptionName);
+      accessoriesTotal += unit * qty;
     }
 
+    const totalPrice = materialCost + colorCost + accessoriesTotal;
     document.getElementById('price').textContent = totalPrice.toFixed(2);
 
+    // Build the whatsapp message (keep existing structure)
     const messageLines = [
       `Hi, I want to order ${productData.name}.`,
       `Material Type: ${typeNameMap[selectedType] || selectedType}`,
@@ -510,15 +617,50 @@
     const encodedMessage = encodeURIComponent(messageLines.join('\n'));
     document.getElementById('whatsappBtn').href = `https://wa.me/601111213149?text=${encodedMessage}`;
   }
+  // ---------- end updated calculation ----------
 
   function updateMainImage(color) {
-    const img = productData.images[color] || Object.values(productData.images)[0];
+    if (!productData) return;
+    const images = productData.images || {};
+    // Prefer exact match for combo keys (e.g., "white + white")
+    if (color && typeof color === 'string' && images[color]) {
+      setProductImage(images[color]);
+      return;
+    }
+
+    // If combo (contains '+') and no exact combo image, use first part's image if present
+    if (color && typeof color === 'string' && color.includes('+')) {
+      const firstPart = color.split('+')[0].trim();
+      if (images[firstPart]) {
+        setProductImage(images[firstPart]);
+        return;
+      }
+    }
+
+    // Otherwise try single color image
+    if (color && images[color]) {
+      setProductImage(images[color]);
+      return;
+    }
+
+    // Fallback to first available image
+    const firstImage = Object.values(images)[0];
+    if (firstImage) {
+      setProductImage(firstImage);
+      return;
+    }
+
+    // final fallback: blank or placeholder
+    setProductImage('');
+  }
+
+  function setProductImage(src) {
     const imageElement = document.getElementById('productImage');
     imageElement.style.opacity = 0;
     setTimeout(() => {
-      imageElement.src = img;
+      imageElement.src = src || 'https://via.placeholder.com/400?text=No+Image';
       imageElement.style.opacity = 1;
-    }, 200);
+    }, 150);
   }
 
   function validateProceedButton() {
