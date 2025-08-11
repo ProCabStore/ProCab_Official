@@ -181,68 +181,225 @@
       productsData = await productsRes.json();
       optionsData = await optionsRes.json();
 
-      renderCategories(optionsData.categories);
+      renderCategories(optionsData.categories || []);
       renderProducts(productsData, optionsData);
     }
 
+    // Helpers to robustly extract numeric base prices and percentages
+    function getMaterialBasePrice(options, key) {
+      if (!key) return 0;
+      const opt = options[key];
+      if (opt == null) return 0;
+      // If option is an object with .price
+      if (typeof opt === 'object' && opt.price != null && typeof opt.price === 'number') return opt.price;
+      // If option itself is a number (rare)
+      if (typeof opt === 'number') return opt;
+      // fallback 0
+      return 0;
+    }
+
+    function getColorBasePrices(options, colorGroupName) {
+      // colors groups in options are plain objects mapping colorName -> number
+      const group = options[colorGroupName];
+      if (group && typeof group === 'object') return group;
+      return {};
+    }
+
+    function getPercentageFromValue(val) {
+      // val might be: { price: { percentage: X } }, or { percentage: X }, or a number X
+      if (val == null) return 100;
+      if (typeof val === 'object') {
+        if (val.price && typeof val.price.percentage === 'number') return val.price.percentage;
+        if (typeof val.percentage === 'number') return val.percentage;
+      }
+      if (typeof val === 'number') return val;
+      return 100; // default if nothing specified
+    }
+
+    // Generic accessory unit price finder (finds the cheapest unit price in options[accessoryKey])
+    function getAccessoryUnitPrice(options, accessoryKey) {
+      const opt = options[accessoryKey];
+      if (opt == null) return 0;
+      if (typeof opt === 'number') return opt;
+      if (typeof opt === 'object') {
+        // Values could be numbers (e.g., { normal: 10, soft close: 20 })
+        const vals = Object.values(opt).filter(v => typeof v === 'number');
+        if (vals.length === 0) return 0;
+        return Math.min(...vals);
+      }
+      return 0;
+    }
+
+    // Main generic calculation:
+    // - supports any number of "type ..." keys
+    // - each type sums all material entries (non-color keys) using percentage * material base price
+    // - for color groups inside a type: supports single color entries and combo entries that are arrays of parts
+    // - picks the cheapest type and then adds all accessories found at product top-level that match options and have quantity
     function calculateCheapestPrice(product, options) {
       let cheapestTypeCost = Infinity;
+      let chosenTypeKey = null;
+      let chosenCheapestColorName = null;
 
-      for (const typeKey of ['type 1', 'type 2']) {
-        if (!product[typeKey]) continue;
+      // find type keys dynamically (keys that start with "type" case-insensitive)
+      const typeKeys = Object.keys(product).filter(k => /^type\b/i.test(k.trim()));
 
+      for (const typeKey of typeKeys) {
         const typeData = product[typeKey];
-        let materialSum = 0;
-        const colorGroups = [];
+        if (!typeData || typeof typeData !== 'object') continue;
 
-        // Sum all materials for this type
-        for (const [key, value] of Object.entries(typeData)) {
-          if (key.toLowerCase().includes('color')) {
-            colorGroups.push(key);
+        let materialSum = 0;
+
+        // Collect color group names found in this type (any key containing 'color')
+        const colorGroupNames = [];
+
+        for (const [matKey, matVal] of Object.entries(typeData)) {
+          if (matKey.toLowerCase().includes('color')) {
+            colorGroupNames.push(matKey);
             continue;
           }
-          const basePrice = options[key]?.price ?? 0;
-          const percentage = value.price?.percentage ?? 100;
+          // treat as material
+          const basePrice = getMaterialBasePrice(options, matKey);
+          const percentage = getPercentageFromValue(matVal);
           materialSum += (basePrice * percentage) / 100;
         }
 
-        // Find cheapest color cost multiplied by its percentage
-        let cheapestColorCost = Infinity;
-        for (const colorGroupName of colorGroups) {
-          const colors = typeData[colorGroupName];
-          const baseColorPrices = options.colors?.[colorGroupName] || {};
+        // Determine total color cost by summing cheapest color (or combo) in each group
+        let totalColorCost = 0;
+        const cheapestNamesForGroups = [];
 
-          for (const [colorName, colorData] of Object.entries(colors)) {
-            const baseColorPrice = baseColorPrices[colorName] ?? 0;
-            const colorPercentage = colorData.percentage ?? 100;
-            const colorCost = (baseColorPrice * colorPercentage) / 100;
-            if (colorCost < cheapestColorCost) {
-              cheapestColorCost = colorCost;
+        for (const colorGroupName of colorGroupNames) {
+          const colorsObj = typeData[colorGroupName] || {};
+          const baseColorPrices = getColorBasePrices(options, colorGroupName);
+
+          let cheapestInGroupCost = Infinity;
+          let cheapestInGroupName = null;
+
+          for (const [colorKey, colorVal] of Object.entries(colorsObj)) {
+            // compute colorCost for this entry (supports arrays of parts or single entries)
+            let colorCost = 0;
+
+            // Case A: array of parts (e.g., "white + white": [ {percentage, color}, {percentage, color} ])
+            if (Array.isArray(colorVal)) {
+              for (const part of colorVal) {
+                const partPct = getPercentageFromValue(part) / 100;
+                const partColorName = (part && part.color) ? part.color : colorKey;
+                const partBasePrice = baseColorPrices[partColorName] != null ? baseColorPrices[partColorName] : 0;
+                colorCost += partBasePrice * partPct;
+              }
+            } else if (typeof colorVal === 'object') {
+              // Case B: single object like { percentage: 70 } or { price: { percentage: 70 } }
+              const pct = getPercentageFromValue(colorVal) / 100;
+              // for single entries, colorKey should be the color name (e.g., "white")
+              const base = baseColorPrices[colorKey] != null ? baseColorPrices[colorKey] : 0;
+              colorCost = base * pct;
+            } else if (typeof colorVal === 'number') {
+              // Case C: direct numeric percentage
+              const pct = colorVal / 100;
+              const base = baseColorPrices[colorKey] != null ? baseColorPrices[colorKey] : 0;
+              colorCost = base * pct;
+            } else {
+              // unknown shape -> skip (cost 0)
+              colorCost = 0;
+            }
+
+            if (colorCost < cheapestInGroupCost) {
+              cheapestInGroupCost = colorCost;
+              cheapestInGroupName = colorKey;
             }
           }
-        }
-        if (cheapestColorCost === Infinity) cheapestColorCost = 0;
 
-        const totalTypeCost = materialSum + cheapestColorCost;
+          if (cheapestInGroupCost === Infinity) cheapestInGroupCost = 0;
+          totalColorCost += cheapestInGroupCost;
+          if (cheapestInGroupName) cheapestNamesForGroups.push(cheapestInGroupName);
+        }
+
+        // If no color groups, color cost is 0
+        if (totalColorCost === 0 && colorGroupNames.length === 0) {
+          totalColorCost = 0;
+        }
+
+        const totalTypeCost = materialSum + totalColorCost;
 
         if (totalTypeCost < cheapestTypeCost) {
           cheapestTypeCost = totalTypeCost;
+          chosenTypeKey = typeKey;
+          chosenCheapestColorName = cheapestNamesForGroups.length ? cheapestNamesForGroups.join(', ') : null;
         }
       }
 
-      let hingeCost = 0;
-      if (product.doorHinges?.quantity > 0) {
-        const minHingePrice = Math.min(...Object.values(options.doorHinges));
-        hingeCost = minHingePrice * product.doorHinges.quantity;
+      // If no type keys found, fallback: attempt to treat the product as a single unnamed type
+      if (cheapestTypeCost === Infinity) {
+        // try to sum top-level material-like keys (defensive)
+        let materialSum = 0;
+        const colorGroupNames = [];
+        for (const [key, val] of Object.entries(product)) {
+          if (['id','name','category','images'].includes(key)) continue;
+          if (key.toLowerCase().includes('color')) { colorGroupNames.push(key); continue; }
+          if (val && val.quantity != null) continue; // skip accessories
+          const basePrice = getMaterialBasePrice(options, key);
+          const percentage = getPercentageFromValue(val);
+          materialSum += (basePrice * percentage) / 100;
+        }
+        let totalColorCost = 0;
+        const cheapestNamesForGroups = [];
+        for (const colorGroupName of colorGroupNames) {
+          const colorsObj = product[colorGroupName] || {};
+          const baseColorPrices = getColorBasePrices(options, colorGroupName);
+          let cheapestInGroupCost = Infinity;
+          let cheapestInGroupName = null;
+          for (const [colorKey, colorVal] of Object.entries(colorsObj)) {
+            let colorCost = 0;
+            if (Array.isArray(colorVal)) {
+              for (const part of colorVal) {
+                const partPct = getPercentageFromValue(part) / 100;
+                const partColorName = (part && part.color) ? part.color : colorKey;
+                const partBasePrice = baseColorPrices[partColorName] != null ? baseColorPrices[partColorName] : 0;
+                colorCost += partBasePrice * partPct;
+              }
+            } else if (typeof colorVal === 'object') {
+              const pct = getPercentageFromValue(colorVal) / 100;
+              const base = baseColorPrices[colorKey] != null ? baseColorPrices[colorKey] : 0;
+              colorCost = base * pct;
+            } else if (typeof colorVal === 'number') {
+              const pct = colorVal / 100;
+              const base = baseColorPrices[colorKey] != null ? baseColorPrices[colorKey] : 0;
+              colorCost = base * pct;
+            } else {
+              colorCost = 0;
+            }
+
+            if (colorCost < cheapestInGroupCost) {
+              cheapestInGroupCost = colorCost;
+              cheapestInGroupName = colorKey;
+            }
+          }
+          if (cheapestInGroupCost === Infinity) cheapestInGroupCost = 0;
+          totalColorCost += cheapestInGroupCost;
+          if (cheapestInGroupName) cheapestNamesForGroups.push(cheapestInGroupName);
+        }
+        if (totalColorCost === 0 && colorGroupNames.length === 0) totalColorCost = 0;
+        cheapestTypeCost = materialSum + totalColorCost;
+        chosenCheapestColorName = cheapestNamesForGroups.length ? cheapestNamesForGroups.join(', ') : null;
       }
 
-      let slideCost = 0;
-      if (product.drawerSlides?.quantity > 0) {
-        const minSlidePrice = Math.min(...Object.values(options.drawerSlides));
-        slideCost = minSlidePrice * product.drawerSlides.quantity;
+      // Accessories: find top-level keys that look like accessories (have .quantity) AND exist in options
+      let accessoryTotal = 0;
+      for (const [key, val] of Object.entries(product)) {
+        if (val && typeof val === 'object' && Number.isFinite(val.quantity)) {
+          // only if options has a matching accessory definition
+          if (options[key] != null) {
+            const unitPrice = getAccessoryUnitPrice(options, key);
+            accessoryTotal += unitPrice * Number(val.quantity);
+          }
+        }
       }
 
-      return (cheapestTypeCost + hingeCost + slideCost).toFixed(2);
+      const finalTotal = Number(cheapestTypeCost || 0) + Number(accessoryTotal || 0);
+      return {
+        price: finalTotal.toFixed(2),
+        cheapestColor: chosenCheapestColorName || null,
+        chosenType: chosenTypeKey || null
+      };
     }
 
     function renderCategories(categories) {
@@ -282,7 +439,8 @@
       grid.innerHTML = '';
 
       products.forEach(product => {
-        const cheapestPrice = calculateCheapestPrice(product, options);
+        const calc = calculateCheapestPrice(product, options);
+        const cheapestPrice = calc.price;
         const firstImage = Object.values(product.images)[0] || 'https://via.placeholder.com/220x180?text=No+Image';
 
         const colorNames = new Set();
@@ -295,6 +453,13 @@
             }
           }
         });
+        // Also check for top-level color groups if any
+        for (const [k, v] of Object.entries(product)) {
+          if (k.toLowerCase().includes('color') && typeof v === 'object') {
+            Object.keys(v).forEach(color => colorNames.add(color));
+          }
+        }
+
         const uniqueColors = Array.from(colorNames);
 
         const colorDisplay = uniqueColors.length > 2
