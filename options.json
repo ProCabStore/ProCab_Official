@@ -12,9 +12,11 @@
   "blockboard 18mm": {
     "price": 333
   },
+
   "blockboard 15mm": {
     "price": 222
   },
+
   "plywood 6mm": {
     "price": 11
   },
@@ -23,19 +25,18 @@
     "price": 0
   },
 
-  "colors": {
-    "formica colors": {
-      "white": 99,
-      "black": 199,
-      "oak": 299,
-      "navy blue": 399
-    },
-    "melamine chipboard 16mm colors": {
-      "white": 66,
-      "black": 166,
-      "oak": 266,
-      "green sage": 366
-    }
+  "formica colors": {
+    "white": 99,
+    "black": 199,
+    "oak": 299,
+    "navy blue": 399
+  },
+
+  "melamine chipboard 16mm colors": {
+    "white": 66,
+    "black": 166,
+    "oak": 266,
+    "green sage": 366
   },
 
   "doorHinges": {
@@ -46,6 +47,12 @@
   "drawerSlides": {
     "normal": 19,
     "soft close": 29
+  },
+
+  "pullOutPantrySlides" : {
+    "normal": 25,
+    "soft close": 35
   }
 }
+
 
