@@ -13,16 +13,14 @@
       },
       "formica colors": {
         "white": [
-          { "percentage": 70, "color": "white" }
+          { "percentage": 40, "color": "white" }
         ],
         "black": [
           { "percentage": 70, "color": "black" }
         ],
-        "oak": [
-          { "percentage": 70, "color": "oak" }
-        ],
-        "navy blue": [
-          { "percentage": 70, "color": "navy blue" }
+        "white + black": [
+          { "percentage": 60, "color": "oak" },
+          { "percentage": 20, "color": "black" }
         ]
       }
     },
@@ -35,16 +33,15 @@
         "price": { "percentage": 15 }
       },
       "melamine chipboard 16mm colors": {
-        "white + white": [
-          { "percentage": 40, "color": "white" },
-          { "percentage": 30, "color": "white" }
-        ],
-        "oak + black": [
-          { "percentage": 60, "color": "oak" },
-          { "percentage": 20, "color": "black" }
+        "white": [
+          { "percentage": 40, "color": "white" }
         ],
         "black": [
           { "percentage": 70, "color": "black" }
+        ],
+        "white + black": [
+          { "percentage": 60, "color": "oak" },
+          { "percentage": 20, "color": "black" }
         ]
       }
     },
@@ -58,13 +55,14 @@
     },
 
     "images": {
-      "white": "ChatGPT Image Jul 13, 2025, 02_05_43 PM.png",
-      "black": "ChatGPT Image Jul 13, 2025, 02_05_43 PM.png",
-      "oak": "ChatGPT Image Jul 13, 2025, 02_05_43 PM.png",
-      "green sage": "Enscape_2025-08-03-20-22-20.png",
-      "navy blue": "ChatGPT Image Jul 13, 2025, 02_05_43 PM.png",
-      "white + white": "Enscape_2025-08-03-20-22-20.png",
-      "oak + black": "Enscape_2025-08-03-20-22-20.png"
+      "white": "photo/wardrobe 1 picture 1.png",
+      "black": "photo/wardrobe 1 picture 6.png",
+      "white + black": "photo/wardrobe 1 picture 4.png",
+      "extra": [
+        "photo/wardrobe 1 picture 1.png",
+        "photo/wardrobe 1 picture 2.png",
+        "photo/wardrobe 1 picture 3.png"
+      ]
     }
   }
 ]
