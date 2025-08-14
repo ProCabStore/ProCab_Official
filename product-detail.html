@@ -4,207 +4,272 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Product Detail</title>
-  <style>
-    /* (Existing styles unchanged) */
 
-    body {
-      font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
-      background-color: #f4f5f7;
-      margin: 0;
-      padding: 1rem;
-      display: flex;
-      justify-content: center;
+  <!-- Swiper -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
+
+  <style>
+    /* ---------- Theme & layout ---------- */
+    :root{
+      --bg: #f4f5f7;
+      --card: #ffffff;
+      --muted: #6b7280;
+      --accent: #111827;
+      --border: #e6e7ea;
+      --pill-bg: #f8f9fb;
+      --radius: 12px;
+      --gap: 0.6rem;
+    }
+
+    html,body{
+      height:100%;
+      margin:0;
+      background:var(--bg);
+      font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, "Helvetica Neue", Arial;
+      color: #111;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+    }
+
+    .wrap {
+      max-width: 980px;
+      margin: 18px auto;
+      padding: 12px;
     }
 
     .card {
-      background: #fff;
-      border-radius: 12px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-      max-width: 900px;
-      width: 100%;
-      display: flex;
-      flex-direction: column;
+      background: var(--card);
+      border-radius: var(--radius);
+      box-shadow: 0 6px 20px rgba(15, 23, 42, 0.06);
       overflow: hidden;
+      display: grid;
+      grid-template-columns: 1fr;
     }
 
-    .card-content {
-      display: flex;
-      flex-direction: column;
+    /* Desktop: two-column layout */
+    @media (min-width: 820px) {
+      .card {
+        grid-template-columns: 1fr 1fr;
+        min-height: 520px;
+      }
     }
 
+    /* ---------- Left: image area (keeps original proportions) ---------- */
     .image-wrapper {
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      padding: 18px;
+      display:flex;
+      justify-content:center;
+      align-items:center;
       background: #fafafa;
-      width: 100%;
-      padding: 1rem;
-      box-sizing: border-box;
+      border-bottom: 1px solid var(--border);
     }
 
-    .image-wrapper img {
-      width: 90%;
-      max-width: 400px;
-      aspect-ratio: 1 / 1;
+    @media (min-width: 820px) {
+      .image-wrapper {
+        padding: 24px;
+        border-right: 1px solid var(--border);
+        border-bottom: none;
+      }
+    }
+
+    /* Constrain the swiper to match previous visuals */
+    .image-wrapper .swiper {
+      width: 94%;
+      max-width: 420px;
+    }
+    .image-wrapper .swiper-slide {
+      display:flex;
+      justify-content:center;
+      align-items:center;
+    }
+    .image-wrapper .swiper-slide img {
+      width: 100%;
+      max-width: 420px;
+      aspect-ratio: 1/1;
       object-fit: contain;
       border-radius: 8px;
-      transition: opacity 0.3s ease-in-out;
+      transition: opacity .2s ease;
     }
 
+    .swiper-button-next, .swiper-button-prev {
+      color: rgba(0,0,0,0.8);
+    }
+    .swiper-pagination-bullet {
+      background: rgba(0,0,0,0.35);
+      opacity: 0.9;
+    }
+
+    /* ---------- Right: details area (keeps original IDs and behavior) ---------- */
     .details {
-      padding: 1rem;
-      display: flex;
-      flex-direction: column;
+      padding: 16px;
+      display:flex;
+      flex-direction:column;
+      gap: 10px;
     }
 
     .product-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 0.8rem;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 12px;
     }
 
     .product-title {
-      font-size: 1.2rem;
-      font-weight: 600;
+      font-size: 1.125rem;
+      font-weight: 700;
       margin: 0;
-      color: #222;
-      flex: 1;
+      color: var(--accent);
+      line-height: 1.15;
     }
 
     .price {
       font-size: 1rem;
-      font-weight: 600;
+      font-weight: 700;
       color: #000;
       margin: 0;
       white-space: nowrap;
     }
 
-    .section {
-      margin-bottom: 0.8rem;
-    }
+    .section { margin-top: 6px; }
 
     .section h4 {
-      font-size: 0.85rem;
-      margin-bottom: 0.3rem;
-      font-weight: 600;
-      color: #555;
+      font-size: 0.82rem;
+      margin: 0 0 8px 0;
+      color: var(--muted);
+      font-weight: 700;
     }
 
+    /* ---------- Compact / responsive option buttons ---------- */
     .options {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.5rem;
+      display: grid;
+      gap: 8px;
+    }
+
+    /* On small screens: compact multi-column grid (pills) */
+    @media (max-width: 640px) {
+      .options {
+        grid-template-columns: repeat(auto-fit, minmax(78px, 1fr));
+        gap: 6px;
+      }
+      .option-btn {
+        padding: 6px 8px;
+        font-size: 0.78rem;
+        border-radius: 8px;
+      }
+    }
+
+    /* On larger screens: slightly bigger and wider buttons */
+    @media (min-width: 641px) {
+      .options {
+        grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+      }
+      .option-btn {
+        padding: 8px 12px;
+        font-size: 0.9rem;
+        border-radius: 10px;
+      }
     }
 
     .option-btn {
-      border: 1px solid #ccc;
-      padding: 0.35rem 0.9rem;
-      border-radius: 6px;
-      background: #fff;
-      color: #333;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap: 8px;
+      border: 1px solid #d1d5db;
+      background: var(--pill-bg);
+      color: #111827;
       cursor: pointer;
-      font-size: 0.85rem;
-      transition: border-color 0.2s, color 0.2s, transform 0.2s, box-shadow 0.2s;
+      transition: transform .12s ease, box-shadow .12s ease, border-color .12s ease;
       white-space: nowrap;
     }
 
     .option-btn:hover {
-      border-color: #888;
-      color: #000;
-      transform: scale(1.05);
+      transform: translateY(-3px);
+      border-color: #9ca3af;
+      box-shadow: 0 6px 18px rgba(16,24,40,0.06);
     }
 
     .option-btn.active {
-      border-color: #000;
-      border-width: 2px;
-      color: #000;
-      font-weight: 600;
-      transform: scale(1.08);
-      box-shadow: 0 3px 8px rgba(0,0,0,0.12);
+      border-color: var(--accent);
+      background: linear-gradient(180deg, #fff, #fbfbfb);
+      box-shadow: 0 8px 24px rgba(17,24,39,0.06);
+      font-weight: 700;
+      transform: translateY(-3px);
     }
 
+    /* Small helper text (materials list) */
+    #materialList {
+      font-size: 0.90rem;
+      color: #374151;
+      line-height: 1.45;
+    }
+
+    /* Accessories - make the option set denser & compact */
+    #accessoriesContainer .options {
+      grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
+      gap: 8px;
+    }
+
+    /* Action buttons row */
     .action-buttons {
-      display: flex;
-      gap: 0.8rem;
-      margin-top: 1rem;
+      display:flex;
+      gap: 10px;
+      margin-top: 12px;
     }
-
     .btn {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 48px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
       border-radius: 10px;
-      font-size: 1rem;
-      font-weight: 600;
-      text-decoration: none;
-      transition: background 0.3s, color 0.3s, transform 0.2s;
-      box-sizing: border-box;
+      font-weight:700;
+      text-decoration:none;
       border: none;
     }
-
     .btn-back {
-      flex: 0 0 30%;
+      flex: 0 0 34%;
       background: #fff;
-      color: #333;
-      border: 1px solid #ccc;
+      color: #111827;
+      border: 1px solid #d1d5db;
+      height:44px;
     }
-
-    .btn-back:hover {
-      background: #f5f5f5;
-      border-color: #aaa;
-    }
-
     .btn-proceed {
-      flex: 0 0 70%;
-      background: #000;
+      flex: 1;
+      background: #111827;
       color: #fff;
-      padding: 0 20px;
+      height:44px;
+      opacity: .5;
       cursor: not-allowed;
-      opacity: 0.5;
     }
-
     .btn-proceed.enabled {
-      cursor: pointer;
       opacity: 1;
+      cursor: pointer;
     }
 
-    .btn-proceed.enabled:hover {
-      background: #222;
-      transform: scale(1.02);
-    }
-
-    @media(min-width: 768px) {
-      .card-content {
-        flex-direction: row;
-      }
-
-      .image-wrapper {
-        width: 50%;
-        border-right: 1px solid #eee;
-        padding: 1.5rem;
-      }
-
-      .image-wrapper img {
-        width: 100%;
-        max-width: 100%;
-        aspect-ratio: 1 / 1;
-      }
-
-      .details {
-        width: 50%;
-        padding: 1.5rem;
-      }
+    /* make layout breathe on very small screens */
+    @media (max-width:420px) {
+      .product-title { font-size: 1rem; }
+      .price { font-size: 0.95rem; }
+      .details { padding: 12px; }
+      .image-wrapper { padding: 12px; }
     }
   </style>
 </head>
 <body>
-  <div class="card">
-    <div class="card-content">
+  <div class="wrap">
+    <div class="card">
+      <!-- Image area -->
       <div class="image-wrapper">
-        <img id="productImage" src="#" alt="Product Image"/>
+        <div class="swiper mySwiper" aria-label="Product images">
+          <div class="swiper-wrapper" id="productImageCarousel">
+            <!-- injected slides -->
+          </div>
+          <div class="swiper-button-next" aria-hidden="true"></div>
+          <div class="swiper-button-prev" aria-hidden="true"></div>
+          <div class="swiper-pagination" aria-hidden="true"></div>
+        </div>
       </div>
+
+      <!-- Details area (kept original IDs & structure) -->
       <div class="details">
         <div class="product-header">
           <h1 class="product-title" id="productName"></h1>
@@ -218,7 +283,7 @@
 
         <div class="section">
           <h4>Materials</h4>
-          <div id="materialList" style="font-size: 0.9rem; color: #444; line-height: 1.3;"></div>
+          <div id="materialList"></div>
         </div>
 
         <div class="section" id="colorSection" style="display:none;">
@@ -236,484 +301,504 @@
     </div>
   </div>
 
-<script>
-  const urlParams = new URLSearchParams(window.location.search);
-  const productId = urlParams.get('id');
-  let productData = null;
-  let optionsData = null;
+  <!-- Swiper -->
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 
-  let selectedType = null;
-  let selectedColor = null;
-  let selectedAccessories = {};
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const productId = urlParams.get('id');
+    let productData = null;
+    let optionsData = null;
 
-  function highlightSelection(container, btn) {
-    container.querySelectorAll('.option-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-  }
+    let selectedType = null;
+    let selectedColor = null;
+    let selectedAccessories = {};
 
-  async function fetchData() {
-    const productRes = await fetch('products.json');
-    const optionsRes = await fetch('options.json');
-    const products = await productRes.json();
-    optionsData = await optionsRes.json();
+    // Swiper instance
+    let swiper = null;
 
-    productData = products.find(p => p.id === productId);
-    if (!productData) {
-      document.querySelector('.details').innerHTML = '<p>Product not found.</p>';
-      return;
+    function highlightSelection(container, btn) {
+      container.querySelectorAll('.option-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
     }
 
-    renderProduct();
-  }
+    async function fetchData() {
+      const productRes = await fetch('products.json');
+      const optionsRes = await fetch('options.json');
+      const products = await productRes.json();
+      optionsData = await optionsRes.json();
 
-  function renderProduct() {
-    document.getElementById('productName').textContent = productData.name;
-    document.getElementById('productImage').src = Object.values(productData.images)[0];
-
-    renderTypeOptions();
-    renderAccessories();
-
-    setDefaultSelections();
-    updatePrice();
-    validateProceedButton();
-  }
-
-  function getAllTypes() {
-    return Object.keys(productData).filter(key => key.toLowerCase().startsWith('type'));
-  }
-
-  const typeNameMap = {
-    'type 1': 'Blockboard + Formica',
-    'type 2': 'Melamine Chipboard',
-  };
-
-  function renderTypeOptions() {
-    const container = document.getElementById('typeOptions');
-    container.innerHTML = '';
-
-    const typeKeys = getAllTypes();
-    if(typeKeys.length === 0) return;
-
-    typeKeys.forEach(typeKey => {
-      const displayName = typeNameMap[typeKey] || typeKey;
-
-      const btn = document.createElement('button');
-      btn.textContent = displayName;
-      btn.className = 'option-btn';
-      btn.onclick = () => {
-        const prevColor = selectedColor;
-        selectedType = typeKey;
-        highlightSelection(container, btn);
-
-        renderMaterialList(typeKey);
-
-        const colors = getColorsForType(typeKey);
-        if (prevColor && colors.includes(prevColor)) {
-          selectedColor = prevColor;
-        } else {
-          selectedColor = colors[0];
-        }
-        renderColorOptions(typeKey, selectedColor);
-
-        updatePrice();
-        updateMainImage(selectedColor);
-        validateProceedButton();
-      };
-      container.appendChild(btn);
-    });
-  }
-
-  // Updated: No percentage, better spacing with list
-  function renderMaterialList(typeKey) {
-    const container = document.getElementById('materialList');
-    container.innerHTML = '';
-
-    const typeData = productData[typeKey];
-    const materialEntries = Object.entries(typeData).filter(([key]) => !key.toLowerCase().includes('color'));
-
-    if(materialEntries.length === 0) {
-      container.textContent = 'No materials found.';
-      return;
-    }
-
-    const ul = document.createElement('ul');
-    ul.style.paddingLeft = '20px';  // neat indentation
-    ul.style.margin = '0';
-    ul.style.color = '#444';
-    ul.style.fontSize = '0.95rem';
-    ul.style.lineHeight = '1.5';
-
-    materialEntries.forEach(([materialName]) => {
-      const li = document.createElement('li');
-      li.textContent = materialName;
-      ul.appendChild(li);
-    });
-
-    container.appendChild(ul);
-  }
-
-  function getColorsForType(typeKey) {
-    const typeData = productData[typeKey];
-    const colorGroups = Object.entries(typeData).filter(([key]) => key.toLowerCase().includes('color'));
-    if (colorGroups.length === 0) return [];
-
-    const colorsSet = new Set();
-    colorGroups.forEach(([_, colorsObj]) => {
-      Object.keys(colorsObj).forEach(colorKey => colorsSet.add(colorKey));
-    });
-    return Array.from(colorsSet);
-  }
-
-  function renderColorOptions(typeKey, preselectColor = null) {
-    const container = document.getElementById('colorOptions');
-    container.innerHTML = '';
-    document.getElementById('colorSection').style.display = 'block';
-
-    const colors = getColorsForType(typeKey);
-    if(colors.length === 0) {
-      document.getElementById('colorSection').style.display = 'none';
-      return;
-    }
-
-    colors.forEach(colorKey => {
-      const btn = document.createElement('button');
-      btn.textContent = colorKey;
-      btn.className = 'option-btn';
-      btn.onclick = () => {
-        selectedColor = colorKey;
-        highlightSelection(container, btn);
-        updatePrice();
-        updateMainImage(colorKey);
-        validateProceedButton();
-      };
-      container.appendChild(btn);
-
-      if (colorKey === preselectColor) {
-        setTimeout(() => btn.click(), 0);
+      productData = products.find(p => p.id === productId);
+      if (!productData) {
+        document.querySelector('.details').innerHTML = '<p>Product not found.</p>';
+        return;
       }
-    });
-  }
 
-  function renderAccessories() {
-    const accessoriesContainer = document.getElementById('accessoriesContainer');
-    accessoriesContainer.innerHTML = '';
+      renderProduct();
+    }
 
-    const excludedKeys = ['id', 'name', 'images'];
-    const typeKeys = getAllTypes();
-    const accessoryKeys = Object.keys(productData).filter(key =>
-      !excludedKeys.includes(key) && !typeKeys.includes(key)
-    );
+    function renderProduct() {
+      document.getElementById('productName').textContent = productData.name;
 
-    if(accessoryKeys.length === 0) return;
+      // Initialize carousel with product images
+      initProductCarousel(productData);
 
-    accessoryKeys.forEach(accessoryKey => {
-      const accessoryData = productData[accessoryKey];
-      const optionPrices = optionsData[accessoryKey];
-      if(!accessoryData || !optionPrices) return;
+      renderTypeOptions();
+      renderAccessories();
 
-      const section = document.createElement('div');
-      section.className = 'section';
-      section.id = accessoryKey + 'Section';
+      setDefaultSelections();
+      updatePrice();
+      validateProceedButton();
+    }
 
-      const heading = document.createElement('h4');
-      heading.textContent = toTitleCase(accessoryKey.replace(/([A-Z])/g, ' $1'));
-      section.appendChild(heading);
+    function getAllTypes() {
+      return Object.keys(productData).filter(key => key.toLowerCase().startsWith('type'));
+    }
 
-      const optionsDiv = document.createElement('div');
-      optionsDiv.className = 'options';
-      optionsDiv.id = accessoryKey + 'Options';
-      section.appendChild(optionsDiv);
+    const typeNameMap = {
+      'type 1': 'Blockboard + Formica',
+      'type 2': 'Melamine Chipboard',
+    };
 
-      accessoriesContainer.appendChild(section);
+    function renderTypeOptions() {
+      const container = document.getElementById('typeOptions');
+      container.innerHTML = '';
 
-      const quantity = accessoryData.quantity || 1;
+      const typeKeys = getAllTypes();
+      if(typeKeys.length === 0) return;
 
-      const cheapestPrice = Math.min(...Object.values(optionPrices));
+      typeKeys.forEach(typeKey => {
+        const displayName = typeNameMap[typeKey] || typeKey;
 
-      Object.entries(optionPrices).forEach(([type, basePrice]) => {
-        const diffPrice = (basePrice - cheapestPrice) * quantity;
         const btn = document.createElement('button');
+        btn.textContent = displayName;
         btn.className = 'option-btn';
-        btn.textContent = diffPrice > 0
-          ? `${type} (+RM${diffPrice.toFixed(2)})`
-          : `${type}`;
         btn.onclick = () => {
-          selectedAccessories[accessoryKey] = type;
-          highlightSelection(optionsDiv, btn);
+          const prevColor = selectedColor;
+          selectedType = typeKey;
+          highlightSelection(container, btn);
+
+          renderMaterialList(typeKey);
+
+          const colors = getColorsForType(typeKey);
+          if (prevColor && colors.includes(prevColor)) {
+            selectedColor = prevColor;
+          } else {
+            selectedColor = colors[0];
+          }
+          renderColorOptions(typeKey, selectedColor);
+
           updatePrice();
+          updateMainImage(selectedColor);
           validateProceedButton();
         };
-        optionsDiv.appendChild(btn);
+        container.appendChild(btn);
+      });
+    }
+
+    function renderMaterialList(typeKey) {
+      const container = document.getElementById('materialList');
+      container.innerHTML = '';
+
+      const typeData = productData[typeKey];
+      const materialEntries = Object.entries(typeData).filter(([key]) => !key.toLowerCase().includes('color'));
+
+      if(materialEntries.length === 0) {
+        container.textContent = 'No materials found.';
+        return;
+      }
+
+      const ul = document.createElement('ul');
+      ul.style.paddingLeft = '18px';
+      ul.style.margin = '0';
+      ul.style.color = '#374151';
+      ul.style.fontSize = '0.95rem';
+      ul.style.lineHeight = '1.45';
+
+      materialEntries.forEach(([materialName]) => {
+        const li = document.createElement('li');
+        li.textContent = materialName;
+        ul.appendChild(li);
       });
 
-      // Default select cheapest
-      const cheapestType = Object.entries(optionPrices).reduce((min, cur) => cur[1] < min[1] ? cur : min)[0];
-      selectedAccessories[accessoryKey] = cheapestType;
-      setTimeout(() => {
-        const btns = optionsDiv.querySelectorAll('.option-btn');
-        btns.forEach(btn => {
-          if (btn.textContent.startsWith(cheapestType)) btn.click();
+      container.appendChild(ul);
+    }
+
+    function getColorsForType(typeKey) {
+      const typeData = productData[typeKey];
+      const colorGroups = Object.entries(typeData).filter(([key]) => key.toLowerCase().includes('color'));
+      if (colorGroups.length === 0) return [];
+
+      const colorsSet = new Set();
+      colorGroups.forEach(([_, colorsObj]) => {
+        Object.keys(colorsObj).forEach(colorKey => colorsSet.add(colorKey));
+      });
+      return Array.from(colorsSet);
+    }
+
+    function renderColorOptions(typeKey, preselectColor = null) {
+      const container = document.getElementById('colorOptions');
+      container.innerHTML = '';
+      document.getElementById('colorSection').style.display = 'block';
+
+      const colors = getColorsForType(typeKey);
+      if(colors.length === 0) {
+        document.getElementById('colorSection').style.display = 'none';
+        return;
+      }
+
+      colors.forEach(colorKey => {
+        const btn = document.createElement('button');
+        btn.textContent = colorKey;
+        btn.className = 'option-btn';
+        btn.onclick = () => {
+          selectedColor = colorKey;
+          highlightSelection(container, btn);
+          updatePrice();
+          updateMainImage(colorKey);
+          validateProceedButton();
+        };
+        container.appendChild(btn);
+
+        if (colorKey === preselectColor) {
+          setTimeout(() => btn.click(), 0);
+        }
+      });
+    }
+
+    function renderAccessories() {
+      const accessoriesContainer = document.getElementById('accessoriesContainer');
+      accessoriesContainer.innerHTML = '';
+
+      const excludedKeys = ['id', 'name', 'images'];
+      const typeKeys = getAllTypes();
+      const accessoryKeys = Object.keys(productData).filter(key =>
+        !excludedKeys.includes(key) && !typeKeys.includes(key)
+      );
+
+      if(accessoryKeys.length === 0) return;
+
+      accessoryKeys.forEach(accessoryKey => {
+        const accessoryData = productData[accessoryKey];
+        const optionPrices = optionsData[accessoryKey];
+        if(!accessoryData || !optionPrices) return;
+
+        const section = document.createElement('div');
+        section.className = 'section';
+        section.id = accessoryKey + 'Section';
+
+        const heading = document.createElement('h4');
+        heading.textContent = toTitleCase(accessoryKey.replace(/([A-Z])/g, ' $1'));
+        section.appendChild(heading);
+
+        const optionsDiv = document.createElement('div');
+        optionsDiv.className = 'options';
+        optionsDiv.id = accessoryKey + 'Options';
+        section.appendChild(optionsDiv);
+
+        accessoriesContainer.appendChild(section);
+
+        const quantity = accessoryData.quantity || 1;
+
+        const cheapestPrice = Math.min(...Object.values(optionPrices));
+
+        Object.entries(optionPrices).forEach(([type, basePrice]) => {
+          const diffPrice = (basePrice - cheapestPrice) * quantity;
+          const btn = document.createElement('button');
+          btn.className = 'option-btn';
+          btn.textContent = diffPrice > 0
+            ? `${type} (+RM${diffPrice.toFixed(2)})`
+            : `${type}`;
+          btn.onclick = () => {
+            selectedAccessories[accessoryKey] = type;
+            highlightSelection(optionsDiv, btn);
+            updatePrice();
+            validateProceedButton();
+          };
+          optionsDiv.appendChild(btn);
         });
-      }, 10);
-    });
-  }
 
-  // ---------- NEW/UPDATED CALCULATION HELPERS & updatePrice() ----------
-  function getMaterialBasePrice(materialKey) {
-    if (!materialKey || !optionsData) return 0;
-    const opt = optionsData[materialKey];
-    if (opt == null) return 0;
-    if (typeof opt === 'object' && typeof opt.price === 'number') return opt.price;
-    if (typeof opt === 'number') return opt;
-    // sometimes optionsData may nest materials under `materials` — try that fallback
-    if (optionsData.materials && optionsData.materials[materialKey]) {
-      const m = optionsData.materials[materialKey];
-      if (typeof m === 'object' && typeof m.price === 'number') return m.price;
-      if (typeof m === 'number') return m;
+        // Default select cheapest
+        const cheapestType = Object.entries(optionPrices).reduce((min, cur) => cur[1] < min[1] ? cur : min)[0];
+        selectedAccessories[accessoryKey] = cheapestType;
+        setTimeout(() => {
+          const btns = optionsDiv.querySelectorAll('.option-btn');
+          btns.forEach(btn => {
+            if (btn.textContent.startsWith(cheapestType)) btn.click();
+          });
+        }, 10);
+      });
     }
-    return 0;
-  }
 
-  function getColorBasePrices(colorGroupName) {
-    if (!colorGroupName || !optionsData) return {};
-    const group = options_data_fallback(colorGroupName);
-    if (group && typeof group === 'object') return group;
-    return {};
-  }
-
-  // fallback helper for options shape used elsewhere (keeps original behavior)
-  function options_data_fallback(colorGroupName) {
-    // Primary: direct key in optionsData
-    if (optionsData[colorGroupName] && typeof optionsData[colorGroupName] === 'object') return optionsData[colorGroupName];
-    // Fallback: sometimes colors grouped under slightly different keys -- try common ones
-    // (We keep this conservative to avoid changing other logic)
-    return optionsData[colorGroupName] || {};
-  }
-
-  function getPercentageFromValue(val) {
-    if (val == null) return 100;
-    if (typeof val === 'object') {
-      if (val.price && typeof val.price.percentage === 'number') return val.price.percentage;
-      if (typeof val.percentage === 'number') return val.percentage;
+    // ---------- Calculation Helpers & updatePrice() ----------
+    function getMaterialBasePrice(materialKey) {
+      if (!materialKey || !optionsData) return 0;
+      const opt = optionsData[materialKey];
+      if (opt == null) return 0;
+      if (typeof opt === 'object' && typeof opt.price === 'number') return opt.price;
+      if (typeof opt === 'number') return opt;
+      if (optionsData.materials && optionsData.materials[materialKey]) {
+        const m = optionsData.materials[materialKey];
+        if (typeof m === 'object' && typeof m.price === 'number') return m.price;
+        if (typeof m === 'number') return m;
+      }
+      return 0;
     }
-    if (typeof val === 'number') return val;
-    return 100;
-  }
 
-  function getAccessoryUnitPriceFromSelection(accessoryKey, selectedOptionName) {
-    if (!optionsData || !accessoryKey) return 0;
-    const opt = optionsData[accessoryKey];
-    if (!opt) return 0;
-    if (typeof opt === 'number') return opt;
-    if (typeof opt === 'object') {
-      const val = opt[selectedOptionName];
+    function getColorBasePrices(colorGroupName) {
+      if (!colorGroupName || !optionsData) return {};
+      const group = options_data_fallback(colorGroupName);
+      if (group && typeof group === 'object') return group;
+      return {};
+    }
+
+    function options_data_fallback(colorGroupName) {
+      if (optionsData[colorGroupName] && typeof optionsData[colorGroupName] === 'object') return optionsData[colorGroupName];
+      return optionsData[colorGroupName] || {};
+    }
+
+    function getPercentageFromValue(val) {
+      if (val == null) return 100;
+      if (typeof val === 'object') {
+        if (val.price && typeof val.price.percentage === 'number') return val.price.percentage;
+        if (typeof val.percentage === 'number') return val.percentage;
+      }
       if (typeof val === 'number') return val;
-      // fallback to the cheapest numeric option
-      const numeric = Object.values(opt).filter(v => typeof v === 'number');
-      if (numeric.length) return Math.min(...numeric);
+      return 100;
     }
-    return 0;
-  }
 
-  // Compute cost for a color entry (colorVal) in a given colorGroup (baseColorPrices)
-  // colorVal may be:
-  // - array of parts: [{percentage, color}, ...]
-  // - object: {percentage: X} (single color entry; colorName comes from colorKey)
-  // - number: percentage
-  function computeColorEntryCost(colorKey, colorVal, baseColorPrices) {
-    let cost = 0;
-
-    if (Array.isArray(colorVal)) {
-      for (const part of colorVal) {
-        const partPct = getPercentageFromValue(part) / 100;
-        const partColorName = (part && part.color) ? part.color : (colorKey.includes('+') ? colorKey.split('+')[0].trim() : colorKey);
-        const partBase = baseColorPrices[partColorName] != null ? baseColorPrices[partColorName] : 0;
-        cost += partBase * partPct;
+    function getAccessoryUnitPriceFromSelection(accessoryKey, selectedOptionName) {
+      if (!optionsData || !accessoryKey) return 0;
+      const opt = optionsData[accessoryKey];
+      if (!opt) return 0;
+      if (typeof opt === 'number') return opt;
+      if (typeof opt === 'object') {
+        const val = opt[selectedOptionName];
+        if (typeof val === 'number') return val;
+        const numeric = Object.values(opt).filter(v => typeof v === 'number');
+        if (numeric.length) return Math.min(...numeric);
       }
-      return cost;
+      return 0;
     }
 
-    if (typeof colorVal === 'object') {
-      const pct = getPercentageFromValue(colorVal) / 100;
-      const base = baseColorPrices[colorKey] != null ? baseColorPrices[colorKey] : 0;
-      return base * pct;
-    }
+    function computeColorEntryCost(colorKey, colorVal, baseColorPrices) {
+      let cost = 0;
 
-    if (typeof colorVal === 'number') {
-      const pct = colorVal / 100;
-      const base = baseColorPrices[colorKey] != null ? baseColorPrices[colorKey] : 0;
-      return base * pct;
-    }
-
-    return 0;
-  }
-
-  function updatePrice() {
-    if (!selectedType) return;
-
-    const typeData = productData[selectedType] || {};
-
-    // 1) Material costs: sum all non-color entries in the chosen type, applying percentages if provided.
-    let materialCost = 0;
-    for (const [materialKey, materialVal] of Object.entries(typeData)) {
-      if (materialKey.toLowerCase().includes('color')) continue; // skip color groups here
-
-      // base price lookup
-      const basePrice = getMaterialBasePrice(materialKey);
-      const pct = getPercentageFromValue(materialVal) / 100;
-      materialCost += basePrice * pct;
-    }
-
-    // 2) Color costs: handle multiple color-groups.
-    // For each color-group inside the chosen type:
-    //  - if selectedColor exists in that group, compute its cost (supports arrays)
-    //  - otherwise pick the cheapest entry in the group (supports arrays)
-    let colorCost = 0;
-    const colorGroupEntries = Object.entries(typeData).filter(([k]) => k.toLowerCase().includes('color'));
-    for (const [colorGroupName, colorsObj] of colorGroupEntries) {
-      const baseColorPrices = getColorBasePrices(colorGroupName); // object mapping colorName -> price
-
-      // If selectedColor exists and present in this group, use it
-      if (selectedColor && colorsObj[selectedColor]) {
-        const selColorVal = colorsObj[selectedColor];
-        colorCost += computeColorEntryCost(selectedColor, selColorVal, baseColorPrices);
-        continue;
+      if (Array.isArray(colorVal)) {
+        for (const part of colorVal) {
+          const partPct = getPercentageFromValue(part) / 100;
+          const partColorName = (part && part.color) ? part.color : (colorKey.includes('+') ? colorKey.split('+')[0].trim() : colorKey);
+          const partBase = baseColorPrices[partColorName] != null ? baseColorPrices[partColorName] : 0;
+          cost += partBase * partPct;
+        }
+        return cost;
       }
 
-      // Otherwise choose cheapest entry in this group
-      let cheapestInGroup = Infinity;
-      for (const [colorKey, colorVal] of Object.entries(colorsObj)) {
-        const cost = computeColorEntryCost(colorKey, colorVal, baseColorPrices);
-        if (cost < cheapestInGroup) cheapestInGroup = cost;
+      if (typeof colorVal === 'object') {
+        const pct = getPercentageFromValue(colorVal) / 100;
+        const base = baseColorPrices[colorKey] != null ? baseColorPrices[colorKey] : 0;
+        return base * pct;
       }
-      if (cheapestInGroup === Infinity) cheapestInGroup = 0;
-      colorCost += cheapestInGroup;
+
+      if (typeof colorVal === 'number') {
+        const pct = colorVal / 100;
+        const base = baseColorPrices[colorKey] != null ? baseColorPrices[colorKey] : 0;
+        return base * pct;
+      }
+
+      return 0;
     }
 
-    // 3) Accessories: selectedAccessories maps accessoryKey -> selected option name (e.g., "normal")
-    let accessoriesTotal = 0;
-    for (const [accKey, accSelectedOptionName] of Object.entries(selectedAccessories)) {
-      const qty = (productData[accKey] && productData[accKey].quantity) ? Number(productData[accKey].quantity) : 1;
-      const unit = getAccessoryUnitPriceFromSelection(accKey, accSelectedOptionName);
-      accessoriesTotal += unit * qty;
+    function updatePrice() {
+      if (!selectedType) return;
+
+      const typeData = productData[selectedType] || {};
+
+      let materialCost = 0;
+      for (const [materialKey, materialVal] of Object.entries(typeData)) {
+        if (materialKey.toLowerCase().includes('color')) continue;
+        const basePrice = getMaterialBasePrice(materialKey);
+        const pct = getPercentageFromValue(materialVal) / 100;
+        materialCost += basePrice * pct;
+      }
+
+      let colorCost = 0;
+      const colorGroupEntries = Object.entries(typeData).filter(([k]) => k.toLowerCase().includes('color'));
+      for (const [colorGroupName, colorsObj] of colorGroupEntries) {
+        const baseColorPrices = getColorBasePrices(colorGroupName);
+        if (selectedColor && colorsObj[selectedColor]) {
+          const selColorVal = colorsObj[selectedColor];
+          colorCost += computeColorEntryCost(selectedColor, selColorVal, baseColorPrices);
+          continue;
+        }
+
+        let cheapestInGroup = Infinity;
+        for (const [colorKey, colorVal] of Object.entries(colorsObj)) {
+          const cost = computeColorEntryCost(colorKey, colorVal, baseColorPrices);
+          if (cost < cheapestInGroup) cheapestInGroup = cost;
+        }
+        if (cheapestInGroup === Infinity) cheapestInGroup = 0;
+        colorCost += cheapestInGroup;
+      }
+
+      let accessoriesTotal = 0;
+      for (const [accKey, accSelectedOptionName] of Object.entries(selectedAccessories)) {
+        const qty = (productData[accKey] && productData[accKey].quantity) ? Number(productData[accKey].quantity) : 1;
+        const unit = getAccessoryUnitPriceFromSelection(accKey, accSelectedOptionName);
+        accessoriesTotal += unit * qty;
+      }
+
+      const totalPrice = materialCost + colorCost + accessoriesTotal;
+      document.getElementById('price').textContent = totalPrice.toFixed(2);
+
+      const messageLines = [
+        `Hi, I want to order ${productData.name}.`,
+        `Material Type: ${typeNameMap[selectedType] || selectedType}`,
+        `Color: ${selectedColor || 'N/A'}`,
+      ];
+
+      for(const [accKey, accType] of Object.entries(selectedAccessories)) {
+        messageLines.push(`${toTitleCase(accKey.replace(/([A-Z])/g, ' $1'))}: ${accType}`);
+      }
+
+      messageLines.push(`Price: RM ${totalPrice.toFixed(2)}`);
+
+      const encodedMessage = encodeURIComponent(messageLines.join('\n'));
+      document.getElementById('whatsappBtn').href = `https://wa.me/601111213149?text=${encodedMessage}`;
     }
 
-    const totalPrice = materialCost + colorCost + accessoriesTotal;
-    document.getElementById('price').textContent = totalPrice.toFixed(2);
+    // ---------------- Carousel functions ----------------
+    function initProductCarousel(product) {
+      const carouselContainer = document.getElementById('productImageCarousel');
+      carouselContainer.innerHTML = '';
 
-    // Build the whatsapp message (keep existing structure)
-    const messageLines = [
-      `Hi, I want to order ${productData.name}.`,
-      `Material Type: ${typeNameMap[selectedType] || selectedType}`,
-      `Color: ${selectedColor || 'N/A'}`,
-    ];
+      // 1) Add extra images (if any) first
+      if (product.images && Array.isArray(product.images.extra)) {
+        product.images.extra.forEach(imgUrl => {
+          const slide = document.createElement('div');
+          slide.classList.add('swiper-slide');
+          slide.innerHTML = `<img src="${imgUrl}" alt="Product detail">`;
+          carouselContainer.appendChild(slide);
+        });
+      }
 
-    for(const [accKey, accType] of Object.entries(selectedAccessories)) {
-      messageLines.push(`${toTitleCase(accKey.replace(/([A-Z])/g, ' $1'))}: ${accType}`);
+      // 2) Add color images (one per color) after extras
+      if (product.images) {
+        Object.entries(product.images).forEach(([key, value]) => {
+          if (key === 'extra') return;
+          const slide = document.createElement('div');
+          slide.classList.add('swiper-slide');
+          slide.setAttribute('data-color', key.toLowerCase());
+          slide.innerHTML = `<img src="${value}" alt="${key}">`;
+          carouselContainer.appendChild(slide);
+        });
+      }
+
+      // 3) Init Swiper
+      if (swiper) {
+        try { swiper.destroy(true, true); } catch (e) {}
+        swiper = null;
+      }
+
+      swiper = new Swiper(".mySwiper", {
+        loop: false,
+        navigation: {
+          nextEl: ".swiper-button-next",
+          prevEl: ".swiper-button-prev"
+        },
+        pagination: {
+          el: ".swiper-pagination",
+          clickable: true
+        },
+        a11y: true,
+      });
+
+      // When user swipes, sync color selection (if slide has data-color)
+      swiper.on('slideChange', () => {
+        const activeSlide = swiper.slides[swiper.activeIndex];
+        if (!activeSlide) return;
+        const color = activeSlide.getAttribute('data-color');
+        if (color) {
+          const container = document.getElementById('colorOptions');
+          if (container) {
+            container.querySelectorAll('.option-btn').forEach(b => {
+              const isMatch = (b.textContent || '').toLowerCase() === color;
+              b.classList.toggle('active', isMatch);
+              if (isMatch) {
+                selectedColor = b.textContent;
+                updatePrice();
+                validateProceedButton();
+              }
+            });
+          }
+        }
+      });
     }
 
-    messageLines.push(`Price: RM ${totalPrice.toFixed(2)}`);
-
-    const encodedMessage = encodeURIComponent(messageLines.join('\n'));
-    document.getElementById('whatsappBtn').href = `https://wa.me/601111213149?text=${encodedMessage}`;
-  }
-  // ---------- end updated calculation ----------
-
-  function updateMainImage(color) {
-    if (!productData) return;
-    const images = productData.images || {};
-    // Prefer exact match for combo keys (e.g., "white + white")
-    if (color && typeof color === 'string' && images[color]) {
-      setProductImage(images[color]);
-      return;
-    }
-
-    // If combo (contains '+') and no exact combo image, use first part's image if present
-    if (color && typeof color === 'string' && color.includes('+')) {
-      const firstPart = color.split('+')[0].trim();
-      if (images[firstPart]) {
-        setProductImage(images[firstPart]);
+    function updateMainImage(color) {
+      if (!productData) return;
+      if (swiper) {
+        const slides = document.querySelectorAll('.swiper-slide');
+        const idx = Array.from(slides).findIndex(s => s.getAttribute('data-color') === (color || '').toLowerCase());
+        if (idx >= 0) {
+          swiper.slideTo(idx);
+          return;
+        }
         return;
       }
     }
 
-    // Otherwise try single color image
-    if (color && images[color]) {
-      setProductImage(images[color]);
-      return;
-    }
+    function validateProceedButton() {
+      const proceedBtn = document.getElementById('whatsappBtn');
 
-    // Fallback to first available image
-    const firstImage = Object.values(images)[0];
-    if (firstImage) {
-      setProductImage(firstImage);
-      return;
-    }
-
-    // final fallback: blank or placeholder
-    setProductImage('');
-  }
-
-  function setProductImage(src) {
-    const imageElement = document.getElementById('productImage');
-    imageElement.style.opacity = 0;
-    setTimeout(() => {
-      imageElement.src = src || 'https://via.placeholder.com/400?text=No+Image';
-      imageElement.style.opacity = 1;
-    }, 150);
-  }
-
-  function validateProceedButton() {
-    const proceedBtn = document.getElementById('whatsappBtn');
-
-    if(!selectedType || !selectedColor) {
-      proceedBtn.classList.remove('enabled');
-      proceedBtn.setAttribute('disabled', 'true');
-      return;
-    }
-
-    const typeKeys = getAllTypes();
-    const excludedKeys = ['id', 'name', 'images', ...typeKeys];
-    const accessoryKeys = Object.keys(productData).filter(key => !excludedKeys.includes(key));
-
-    for(const accKey of accessoryKeys) {
-      if(!selectedAccessories[accKey]) {
+      if(!selectedType || !selectedColor) {
         proceedBtn.classList.remove('enabled');
         proceedBtn.setAttribute('disabled', 'true');
         return;
       }
+
+      const typeKeys = getAllTypes();
+      const excludedKeys = ['id', 'name', 'images', ...typeKeys];
+      const accessoryKeys = Object.keys(productData).filter(key => !excludedKeys.includes(key));
+
+      for(const accKey of accessoryKeys) {
+        if(!selectedAccessories[accKey]) {
+          proceedBtn.classList.remove('enabled');
+          proceedBtn.setAttribute('disabled', 'true');
+          return;
+        }
+      }
+
+      proceedBtn.classList.add('enabled');
+      proceedBtn.removeAttribute('disabled');
     }
 
-    proceedBtn.classList.add('enabled');
-    proceedBtn.removeAttribute('disabled');
-  }
+    function setDefaultSelections() {
+      const types = getAllTypes();
+      if(types.length === 0) return;
 
-  function setDefaultSelections() {
-    const types = getAllTypes();
-    if(types.length === 0) return;
+      selectedType = types[0];
+      const typeBtns = document.getElementById('typeOptions').querySelectorAll('button');
+      if(typeBtns.length) highlightSelection(document.getElementById('typeOptions'), typeBtns[0]);
 
-    selectedType = types[0];
-    const typeBtns = document.getElementById('typeOptions').querySelectorAll('button');
-    if(typeBtns.length) highlightSelection(document.getElementById('typeOptions'), typeBtns[0]);
+      renderMaterialList(selectedType);
 
-    renderMaterialList(selectedType);
-
-    const colors = getColorsForType(selectedType);
-    if(colors.length) {
-      selectedColor = colors[0];
-      renderColorOptions(selectedType, selectedColor);
-      updateMainImage(selectedColor);
-    } else {
-      document.getElementById('colorSection').style.display = 'none';
+      const colors = getColorsForType(selectedType);
+      if(colors.length) {
+        selectedColor = colors[0];
+        renderColorOptions(selectedType, selectedColor);
+        updateMainImage(selectedColor);
+      } else {
+        document.getElementById('colorSection').style.display = 'none';
+      }
     }
-  }
 
-  function toTitleCase(str) {
-    return str.replace(/\b\w/g, c => c.toUpperCase());
-  }
+    function toTitleCase(str) {
+      return str.replace(/\b\w/g, c => c.toUpperCase());
+    }
 
-  fetchData();
-</script>
-
+    // Start
+    fetchData();
+  </script>
 </body>
 </html>
