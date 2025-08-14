@@ -99,7 +99,7 @@
       opacity: 0.9;
     }
 
-    /* ---------- Right: details area (keeps original IDs and behavior) ---------- */
+    /* ---------- Right: details area ---------- */
     .details {
       padding: 16px;
       display:flex;
@@ -247,6 +247,14 @@
 
     /* make layout breathe on very small screens */
     @media (max-width:420px) {
+      .wrap {
+        max-width: 100%;
+        margin: 0;
+        padding: 10px;
+      }
+      .card {
+        border-radius: 0;
+      }
       .product-title { font-size: 1rem; }
       .price { font-size: 0.95rem; }
       .details { padding: 12px; }
@@ -802,3 +810,4 @@
   </script>
 </body>
 </html>
+
