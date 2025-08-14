@@ -9,6 +9,11 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
 
   <style>
+    /* ---------- Reset & core fixes ---------- */
+    * { box-sizing: border-box; }
+    html, body { width: 100%; margin: 0; padding: 0; overflow-x: hidden; }
+    img { max-width: 100%; height: auto; display: block; }
+
     /* ---------- Theme & layout ---------- */
     :root{
       --bg: #f4f5f7;
@@ -23,7 +28,6 @@
 
     html,body{
       height:100%;
-      margin:0;
       background:var(--bg);
       font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, "Helvetica Neue", Arial;
       color: #111;
@@ -33,6 +37,7 @@
 
     .wrap {
       max-width: 980px;
+      width: 100%;
       margin: 18px auto;
       padding: 12px;
     }
@@ -44,6 +49,8 @@
       overflow: hidden;
       display: grid;
       grid-template-columns: 1fr;
+      width: 100%;
+      min-width: 0; /* important so children can shrink */
     }
 
     /* Desktop: two-column layout */
@@ -54,7 +61,7 @@
       }
     }
 
-    /* ---------- Left: image area (keeps original proportions) ---------- */
+    /* ---------- Left: image area ---------- */
     .image-wrapper {
       padding: 18px;
       display:flex;
@@ -62,6 +69,7 @@
       align-items:center;
       background: #fafafa;
       border-bottom: 1px solid var(--border);
+      min-width: 0; /* allows image area to shrink on small screens */
     }
 
     @media (min-width: 820px) {
@@ -76,6 +84,7 @@
     .image-wrapper .swiper {
       width: 94%;
       max-width: 420px;
+      box-sizing: border-box;
     }
     .image-wrapper .swiper-slide {
       display:flex;
@@ -83,12 +92,13 @@
       align-items:center;
     }
     .image-wrapper .swiper-slide img {
-      width: 100%;
-      max-width: 420px;
+      max-width: 100%;
+      height: auto;
       aspect-ratio: 1/1;
       object-fit: contain;
       border-radius: 8px;
       transition: opacity .2s ease;
+      display: block;
     }
 
     .swiper-button-next, .swiper-button-prev {
@@ -99,12 +109,14 @@
       opacity: 0.9;
     }
 
-    /* ---------- Right: details area ---------- */
+    /* ---------- Right: details area (keeps original IDs and behavior) ---------- */
     .details {
       padding: 16px;
       display:flex;
       flex-direction:column;
       gap: 10px;
+      min-width: 0; /* critical: allow content to shrink inside grid */
+      word-break: break-word;
     }
 
     .product-header {
@@ -120,6 +132,7 @@
       margin: 0;
       color: var(--accent);
       line-height: 1.15;
+      word-break: break-word;
     }
 
     .price {
@@ -143,18 +156,21 @@
     .options {
       display: grid;
       gap: 8px;
+      /* default fall-back: let items share available width */
+      grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
     }
 
     /* On small screens: compact multi-column grid (pills) */
     @media (max-width: 640px) {
       .options {
-        grid-template-columns: repeat(auto-fit, minmax(78px, 1fr));
+        grid-template-columns: repeat(auto-fit, minmax(0, 1fr)); /* allow true shrinking */
         gap: 6px;
       }
       .option-btn {
         padding: 6px 8px;
         font-size: 0.78rem;
         border-radius: 8px;
+        min-width: 0;
       }
     }
 
@@ -181,6 +197,9 @@
       cursor: pointer;
       transition: transform .12s ease, box-shadow .12s ease, border-color .12s ease;
       white-space: nowrap;
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     .option-btn:hover {
@@ -206,7 +225,7 @@
 
     /* Accessories - make the option set denser & compact */
     #accessoriesContainer .options {
-      grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
       gap: 8px;
     }
 
@@ -215,6 +234,8 @@
       display:flex;
       gap: 10px;
       margin-top: 12px;
+      align-items: center;
+      flex-wrap: wrap; /* allow wrapping on small screens */
     }
     .btn {
       display:flex;
@@ -224,6 +245,7 @@
       font-weight:700;
       text-decoration:none;
       border: none;
+      min-width: 0;
     }
     .btn-back {
       flex: 0 0 34%;
@@ -239,6 +261,7 @@
       height:44px;
       opacity: .5;
       cursor: not-allowed;
+      text-align: center;
     }
     .btn-proceed.enabled {
       opacity: 1;
@@ -259,6 +282,10 @@
       .price { font-size: 0.95rem; }
       .details { padding: 12px; }
       .image-wrapper { padding: 12px; }
+
+      /* ensure action buttons don't overflow on very small widths */
+      .action-buttons .btn-back { flex-basis: 46%; }
+      .action-buttons .btn-proceed { flex-basis: 48%; }
     }
   </style>
 </head>
@@ -810,4 +837,3 @@
   </script>
 </body>
 </html>
-
