@@ -2,46 +2,46 @@
   {"id": "product1", "name": "Wardrobe Two Door", "category": "wardrobe",
 
     "type 1": {
-      "blockboard 18mm": {
-        "price": { "percentage": 85 }
-      },
-      "blockboard 15mm": {
-        "price": { "percentage": 50 }
+      "melamine chipboard 16mm": {
+        "price": { "percentage": 0 }
       },
       "plywood 6mm": {
-        "price": { "percentage": 15 }
+        "price": { "percentage": 100 }
       },
-      "formica colors": {
+      "melamine chipboard 16mm colors": {
         "white": [
-          { "percentage": 40, "color": "white" }
+          { "percentage": 100, "color": "white" }
         ],
         "black": [
-          { "percentage": 70, "color": "black" }
+          { "percentage": 100, "color": "black" }
         ],
         "white + black": [
-          { "percentage": 60, "color": "oak" },
-          { "percentage": 20, "color": "black" }
+          { "percentage": 100, "color": "white" },
+          { "percentage": 100, "color": "black" }
         ]
       }
     },
 
     "type 2": {
-      "melamine chipboard 16mm": {
-        "price": { "percentage": 0 }
+      "blockboard 18mm": {
+        "price": { "percentage": 251 }
+      },
+      "blockboard 15mm": {
+        "price": { "percentage": 49 }
       },
       "plywood 6mm": {
-        "price": { "percentage": 15 }
+        "price": { "percentage": 66 }
       },
-      "melamine chipboard 16mm colors": {
+      "formica colors": {
         "white": [
-          { "percentage": 40, "color": "white" }
+          { "percentage": 161, "color": "white" }
         ],
         "black": [
-          { "percentage": 70, "color": "black" }
+          { "percentage": 161, "color": "black" }
         ],
         "white + black": [
-          { "percentage": 60, "color": "oak" },
-          { "percentage": 20, "color": "black" }
+          { "percentage": 68, "color": "white" },
+          { "percentage": 93, "color": "black" }
         ]
       }
     },
@@ -56,7 +56,7 @@
 
     "images": {
       "white": "photo/wardrobe 1 picture 1.png",
-      "black": "photo/wardrobe 1 picture 6.png",
+      "black": "photo/wardrobe 1 picture 5.png",
       "white + black": "photo/wardrobe 1 picture 4.png",
       "extra": [
         "photo/wardrobe 1 picture 1.png",
