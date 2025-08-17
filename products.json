@@ -1,4 +1,117 @@
 [
+  {"id": "product0", "name": "Wardrobe Two Door", "category": "wardrobe",
+
+    "type 1": {
+      "melamine chipboard 16mm": {
+        "price": { "percentage": 0 }
+      },
+      "plywood 6mm": {
+        "price": { "percentage": 100 }
+      },
+      "melamine chipboard 16mm colors": {
+        "white": [
+          { "percentage": 100, "color": "white" }
+        ],
+        "black": [
+          { "percentage": 100, "color": "black" }
+        ],
+        "oak": [
+          { "percentage": 100, "color": "oak" }
+        ],
+        "green sage": [
+          { "percentage": 100, "color": "green sage" }
+        ],
+        "navy blue": [
+          { "percentage": 100, "color": "navy blue" }
+        ],
+        "white + black": [
+          { "percentage": 100, "color": "white" },
+          { "percentage": 100, "color": "black" }
+        ]
+      }
+    },
+
+    "type 2": {
+      "blockboard 18mm": {
+        "price": { "percentage": 100 }
+      },
+      "blockboard 15mm": {
+        "price": { "percentage": 100 }
+      },
+      "plywood 6mm": {
+        "price": { "percentage": 100 }
+      },
+      "formica colors": {
+        "white": [
+          { "percentage": 100, "color": "white" }
+        ],
+        "black": [
+          { "percentage": 100, "color": "black" }
+        ],
+        "oak": [
+          { "percentage": 100, "color": "oak" }
+        ],
+        "green sage": [
+          { "percentage": 100, "color": "green sage" }
+        ],
+        "navy blue": [
+          { "percentage": 100, "color": "navy blue" }
+        ],
+        "white + black": [
+          { "percentage": 100, "color": "white" },
+          { "percentage": 100, "color": "black" }
+        ]
+      }
+    },
+
+    "type 3": {
+
+    },
+
+    "type 4": {
+
+    },
+
+    "doorHinges": {
+        "normal": true,
+        "soft close": true,
+        "non soft close": true,
+        "push to open": false,
+        "undermount": false,
+        "quantity": 3
+    },
+
+    "drawerSlides": {
+        "normal": true,
+        "soft close": true,
+        "non soft close": true,
+        "push to open": false,
+        "undermount": true,
+        "quantity": 3
+    },
+
+    
+    "pullOutPantrySlides" : {
+        "normal": true,
+        "soft close": true,
+        "non soft close": true,
+        "push to open": true,
+        "undermount": false,
+        "quantity": 3
+    },
+
+    "images": {
+      "white": "photo/logo.png",
+      "black": "photo/logo.png",
+      "white + black": "photo/logo.png",
+      "extra": [
+        "photo/logo.png",
+        "photo/logo.png",
+        "photo/logo.png"
+      ]
+    }
+  },
+
   {"id": "product1", "name": "Wardrobe Two Door", "category": "wardrobe",
 
     "type 1": {
@@ -47,13 +160,23 @@
     },
 
     "doorHinges": {
-      "quantity": 3
+        "normal": true,
+        "soft close": true,
+        "non soft close": true,
+        "push to open": true,
+        "undermount": false,
+        "quantity": 3
     },
 
     "drawerSlides": {
-      "quantity": 3
+        "normal": true,
+        "soft close": true,
+        "non soft close": true,
+        "push to open": true,
+        "undermount": false,
+        "quantity": 3
     },
-
+    
     "images": {
       "white": "photo/wardrobe 1 picture 1.png",
       "black": "photo/wardrobe 1 picture 5.png",
