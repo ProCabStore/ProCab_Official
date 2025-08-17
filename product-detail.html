@@ -4,17 +4,12 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Product Detail</title>
-
-  <!-- Swiper -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
-
   <style>
-    /* ---------- Reset & core fixes ---------- */
     * { box-sizing: border-box; }
     html, body { width: 100%; margin: 0; padding: 0; overflow-x: hidden; }
     img { max-width: 100%; height: auto; display: block; }
 
-    /* ---------- Theme & layout ---------- */
     :root{
       --bg: #f4f5f7;
       --card: #ffffff;
@@ -50,10 +45,9 @@
       display: grid;
       grid-template-columns: 1fr;
       width: 100%;
-      min-width: 0; /* important so children can shrink */
+      min-width: 0;
     }
 
-    /* Desktop: two-column layout */
     @media (min-width: 820px) {
       .card {
         grid-template-columns: 1fr 1fr;
@@ -61,7 +55,6 @@
       }
     }
 
-    /* ---------- Left: image area ---------- */
     .image-wrapper {
       padding: 18px;
       display:flex;
@@ -69,7 +62,7 @@
       align-items:center;
       background: #fafafa;
       border-bottom: 1px solid var(--border);
-      min-width: 0; /* allows image area to shrink on small screens */
+      min-width: 0;
     }
 
     @media (min-width: 820px) {
@@ -80,7 +73,6 @@
       }
     }
 
-    /* Constrain the swiper to match previous visuals */
     .image-wrapper .swiper {
       width: 94%;
       max-width: 420px;
@@ -109,13 +101,12 @@
       opacity: 0.9;
     }
 
-    /* ---------- Right: details area (keeps original IDs and behavior) ---------- */
     .details {
       padding: 16px;
       display:flex;
       flex-direction:column;
       gap: 10px;
-      min-width: 0; /* critical: allow content to shrink inside grid */
+      min-width: 0;
       word-break: break-word;
     }
 
@@ -152,90 +143,54 @@
       font-weight: 700;
     }
 
-    /* ---------- Compact / responsive option buttons ---------- */
-    .options {
-      display: grid;
-      gap: 8px;
-      /* default fall-back: let items share available width */
-      grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
+    .select-wrapper {
+      position: relative;
+      width: 100%;
     }
 
-    /* On small screens: compact multi-column grid (pills) */
-    @media (max-width: 640px) {
-      .options {
-        grid-template-columns: repeat(auto-fit, minmax(0, 1fr)); /* allow true shrinking */
-        gap: 6px;
-      }
-      .option-btn {
-        padding: 6px 8px;
-        font-size: 0.78rem;
-        border-radius: 8px;
-        min-width: 0;
-      }
-    }
-
-    /* On larger screens: slightly bigger and wider buttons */
-    @media (min-width: 641px) {
-      .options {
-        grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
-      }
-      .option-btn {
-        padding: 8px 12px;
-        font-size: 0.9rem;
-        border-radius: 10px;
-      }
-    }
-
-    .option-btn {
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      gap: 8px;
+    .select-wrapper select {
+      width: 100%;
+      padding: 10px 12px;
       border: 1px solid #d1d5db;
-      background: var(--pill-bg);
+      border-radius: 8px;
+      background-color: #f8f9fb;
+      font-size: 0.9rem;
       color: #111827;
+      appearance: none;
+      -webkit-appearance: none;
+      -moz-appearance: none;
       cursor: pointer;
-      transition: transform .12s ease, box-shadow .12s ease, border-color .12s ease;
-      white-space: nowrap;
-      min-width: 0;
-      overflow: hidden;
-      text-overflow: ellipsis;
+      transition: border-color 0.2s ease;
     }
 
-    .option-btn:hover {
-      transform: translateY(-3px);
+    .select-wrapper select:focus {
+      outline: none;
       border-color: #9ca3af;
-      box-shadow: 0 6px 18px rgba(16,24,40,0.06);
     }
 
-    .option-btn.active {
-      border-color: var(--accent);
-      background: linear-gradient(180deg, #fff, #fbfbfb);
-      box-shadow: 0 8px 24px rgba(17,24,39,0.06);
-      font-weight: 700;
-      transform: translateY(-3px);
+    .select-wrapper::after {
+      content: "▼";
+      font-size: 0.7rem;
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      pointer-events: none;
+      color: #6b7280;
     }
 
-    /* Small helper text (materials list) */
     #materialList {
       font-size: 0.90rem;
       color: #374151;
       line-height: 1.45;
     }
 
-    /* Accessories - make the option set denser & compact */
-    #accessoriesContainer .options {
-      grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
-      gap: 8px;
-    }
-
-    /* Action buttons row */
     .action-buttons {
       display:flex;
       gap: 10px;
       margin-top: 12px;
       align-items: center;
-      flex-wrap: wrap; /* allow wrapping on small screens */
+      flex-wrap: wrap;
     }
     .btn {
       display:flex;
@@ -268,7 +223,6 @@
       cursor: pointer;
     }
 
-    /* make layout breathe on very small screens */
     @media (max-width:420px) {
       .wrap {
         max-width: 100%;
@@ -282,8 +236,6 @@
       .price { font-size: 0.95rem; }
       .details { padding: 12px; }
       .image-wrapper { padding: 12px; }
-
-      /* ensure action buttons don't overflow on very small widths */
       .action-buttons .btn-back { flex-basis: 46%; }
       .action-buttons .btn-proceed { flex-basis: 48%; }
     }
@@ -292,19 +244,15 @@
 <body>
   <div class="wrap">
     <div class="card">
-      <!-- Image area -->
       <div class="image-wrapper">
         <div class="swiper mySwiper" aria-label="Product images">
-          <div class="swiper-wrapper" id="productImageCarousel">
-            <!-- injected slides -->
-          </div>
+          <div class="swiper-wrapper" id="productImageCarousel"></div>
           <div class="swiper-button-next" aria-hidden="true"></div>
           <div class="swiper-button-prev" aria-hidden="true"></div>
           <div class="swiper-pagination" aria-hidden="true"></div>
         </div>
       </div>
 
-      <!-- Details area (kept original IDs & structure) -->
       <div class="details">
         <div class="product-header">
           <h1 class="product-title" id="productName"></h1>
@@ -313,7 +261,9 @@
 
         <div class="section">
           <h4>Material Type</h4>
-          <div class="options" id="typeOptions"></div>
+          <div class="select-wrapper">
+            <select id="typeOptions"></select>
+          </div>
         </div>
 
         <div class="section">
@@ -321,9 +271,11 @@
           <div id="materialList"></div>
         </div>
 
-        <div class="section" id="colorSection" style="display:none;">
+        <div class="section" id="colorSection">
           <h4>Color</h4>
-          <div class="options" id="colorOptions"></div>
+          <div class="select-wrapper">
+            <select id="colorOptions"></select>
+          </div>
         </div>
 
         <div id="accessoriesContainer"></div>
@@ -336,7 +288,6 @@
     </div>
   </div>
 
-  <!-- Swiper -->
   <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 
   <script>
@@ -349,39 +300,33 @@
     let selectedColor = null;
     let selectedAccessories = {};
 
-    // Swiper instance
     let swiper = null;
 
-    function highlightSelection(container, btn) {
-      container.querySelectorAll('.option-btn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-    }
-
     async function fetchData() {
-      const productRes = await fetch('products.json');
-      const optionsRes = await fetch('options.json');
-      const products = await productRes.json();
-      optionsData = await optionsRes.json();
+      try {
+        const productRes = await fetch('products.json');
+        const optionsRes = await fetch('options.json');
+        const products = await productRes.json();
+        optionsData = await optionsRes.json();
 
-      productData = products.find(p => p.id === productId);
-      if (!productData) {
-        document.querySelector('.details').innerHTML = '<p>Product not found.</p>';
-        return;
+        productData = products.find(p => p.id === productId);
+        if (!productData) {
+          document.querySelector('.details').innerHTML = '<p>Product not found.</p>';
+          return;
+        }
+
+        renderProduct();
+      } catch (error) {
+        console.error('Error loading data:', error);
+        document.querySelector('.details').innerHTML = '<p>Error loading product data.</p>';
       }
-
-      renderProduct();
     }
 
     function renderProduct() {
       document.getElementById('productName').textContent = productData.name;
-
-      // Initialize carousel with product images
       initProductCarousel(productData);
-
       renderTypeOptions();
       renderAccessories();
-
-      setDefaultSelections();
       updatePrice();
       validateProceedButton();
     }
@@ -390,10 +335,10 @@
       return Object.keys(productData).filter(key => key.toLowerCase().startsWith('type'));
     }
 
-     const typeNameMap = {
-     'type 1': 'Melamine Chipboard',
-     'type 2': 'Blockboard + Formica',
-    }; 
+    const typeNameMap = {
+      'type 1': 'Melamine Chipboard',
+      'type 2': 'Blockboard + Formica',
+    };
 
     function renderTypeOptions() {
       const container = document.getElementById('typeOptions');
@@ -402,32 +347,72 @@
       const typeKeys = getAllTypes();
       if(typeKeys.length === 0) return;
 
+      // Find the cheapest type
+      let cheapestType = null;
+      let cheapestPrice = Infinity;
+
+      typeKeys.forEach(typeKey => {
+        const typeData = productData[typeKey];
+        let typePrice = 0;
+        
+        // Calculate material price
+        for (const [materialKey, materialVal] of Object.entries(typeData)) {
+          if (materialKey.toLowerCase().includes('color')) continue;
+          const basePrice = getMaterialBasePrice(materialKey);
+          const pct = getPercentageFromValue(materialVal) / 100;
+          typePrice += basePrice * pct;
+        }
+
+        // Find cheapest color for this type
+        const colorGroupEntries = Object.entries(typeData).filter(([k]) => k.toLowerCase().includes('color'));
+        for (const [colorGroupName, colorsObj] of colorGroupEntries) {
+          const baseColorPrices = getColorBasePrices(colorGroupName);
+          let cheapestColorPrice = Infinity;
+          
+          for (const [colorKey, colorVal] of Object.entries(colorsObj)) {
+            const cost = computeColorEntryCost(colorKey, colorVal, baseColorPrices);
+            if (cost < cheapestColorPrice) cheapestColorPrice = cost;
+          }
+          
+          typePrice += (cheapestColorPrice === Infinity) ? 0 : cheapestColorPrice;
+        }
+
+        if (typePrice < cheapestPrice) {
+          cheapestPrice = typePrice;
+          cheapestType = typeKey;
+        }
+      });
+
+      // Add options
       typeKeys.forEach(typeKey => {
         const displayName = typeNameMap[typeKey] || typeKey;
+        const option = document.createElement('option');
+        option.value = typeKey;
+        option.textContent = displayName;
+        container.appendChild(option);
+      });
 
-        const btn = document.createElement('button');
-        btn.textContent = displayName;
-        btn.className = 'option-btn';
-        btn.onclick = () => {
-          const prevColor = selectedColor;
-          selectedType = typeKey;
-          highlightSelection(container, btn);
+      // Auto-select cheapest type
+      if (cheapestType) {
+        container.value = cheapestType;
+        selectedType = cheapestType;
+        
+        // Render materials and colors for this type
+        renderMaterialList(selectedType);
+        renderColorOptions(selectedType);
+        
+        // Update price and image
+        updatePrice();
+        updateMainImage(selectedColor);
+      }
 
-          renderMaterialList(typeKey);
-
-          const colors = getColorsForType(typeKey);
-          if (prevColor && colors.includes(prevColor)) {
-            selectedColor = prevColor;
-          } else {
-            selectedColor = colors[0];
-          }
-          renderColorOptions(typeKey, selectedColor);
-
-          updatePrice();
-          updateMainImage(selectedColor);
-          validateProceedButton();
-        };
-        container.appendChild(btn);
+      container.addEventListener('change', (e) => {
+        selectedType = e.target.value;
+        renderMaterialList(selectedType);
+        renderColorOptions(selectedType);
+        updatePrice();
+        updateMainImage(selectedColor);
+        validateProceedButton();
       });
     }
 
@@ -471,33 +456,57 @@
       return Array.from(colorsSet);
     }
 
-    function renderColorOptions(typeKey, preselectColor = null) {
+    function renderColorOptions(typeKey) {
       const container = document.getElementById('colorOptions');
       container.innerHTML = '';
-      document.getElementById('colorSection').style.display = 'block';
 
       const colors = getColorsForType(typeKey);
       if(colors.length === 0) {
-        document.getElementById('colorSection').style.display = 'none';
+        const option = document.createElement('option');
+        option.value = '';
+        option.textContent = 'No colors available';
+        container.appendChild(option);
         return;
       }
 
-      colors.forEach(colorKey => {
-        const btn = document.createElement('button');
-        btn.textContent = colorKey;
-        btn.className = 'option-btn';
-        btn.onclick = () => {
-          selectedColor = colorKey;
-          highlightSelection(container, btn);
-          updatePrice();
-          updateMainImage(colorKey);
-          validateProceedButton();
-        };
-        container.appendChild(btn);
+      // Find cheapest color
+      const typeData = productData[typeKey];
+      const colorGroupEntries = Object.entries(typeData).filter(([k]) => k.toLowerCase().includes('color'));
+      let cheapestColor = null;
+      let cheapestColorPrice = Infinity;
 
-        if (colorKey === preselectColor) {
-          setTimeout(() => btn.click(), 0);
+      for (const [colorGroupName, colorsObj] of colorGroupEntries) {
+        const baseColorPrices = getColorBasePrices(colorGroupName);
+        
+        for (const [colorKey, colorVal] of Object.entries(colorsObj)) {
+          const cost = computeColorEntryCost(colorKey, colorVal, baseColorPrices);
+          if (cost < cheapestColorPrice) {
+            cheapestColorPrice = cost;
+            cheapestColor = colorKey;
+          }
         }
+      }
+
+      // Auto-select cheapest color
+      if (cheapestColor) {
+        selectedColor = cheapestColor;
+      } else {
+        selectedColor = colors[0];
+      }
+
+      colors.forEach(colorKey => {
+        const option = document.createElement('option');
+        option.value = colorKey;
+        option.textContent = colorKey;
+        option.selected = (colorKey === selectedColor);
+        container.appendChild(option);
+      });
+
+      container.addEventListener('change', (e) => {
+        selectedColor = e.target.value;
+        updatePrice();
+        updateMainImage(selectedColor);
+        validateProceedButton();
       });
     }
 
@@ -515,7 +524,7 @@
 
       accessoryKeys.forEach(accessoryKey => {
         const accessoryData = productData[accessoryKey];
-        const optionPrices = optionsData[accessoryKey];
+        const optionPrices = optionsData.accessory[accessoryKey];
         if(!accessoryData || !optionPrices) return;
 
         const section = document.createElement('div');
@@ -526,70 +535,59 @@
         heading.textContent = toTitleCase(accessoryKey.replace(/([A-Z])/g, ' $1'));
         section.appendChild(heading);
 
-        const optionsDiv = document.createElement('div');
-        optionsDiv.className = 'options';
-        optionsDiv.id = accessoryKey + 'Options';
-        section.appendChild(optionsDiv);
+        const selectWrapper = document.createElement('div');
+        selectWrapper.className = 'select-wrapper';
+        
+        const select = document.createElement('select');
+        select.id = accessoryKey + 'Options';
+        section.appendChild(selectWrapper);
+        selectWrapper.appendChild(select);
 
         accessoriesContainer.appendChild(section);
 
         const quantity = accessoryData.quantity || 1;
-
         const cheapestPrice = Math.min(...Object.values(optionPrices));
 
         Object.entries(optionPrices).forEach(([type, basePrice]) => {
           const diffPrice = (basePrice - cheapestPrice) * quantity;
-          const btn = document.createElement('button');
-          btn.className = 'option-btn';
-          btn.textContent = diffPrice > 0
+          const option = document.createElement('option');
+          option.value = type;
+          option.textContent = diffPrice > 0
             ? `${type} (+RM${diffPrice.toFixed(2)})`
             : `${type}`;
-          btn.onclick = () => {
-            selectedAccessories[accessoryKey] = type;
-            highlightSelection(optionsDiv, btn);
-            updatePrice();
-            validateProceedButton();
-          };
-          optionsDiv.appendChild(btn);
+          select.appendChild(option);
         });
 
         // Default select cheapest
         const cheapestType = Object.entries(optionPrices).reduce((min, cur) => cur[1] < min[1] ? cur : min)[0];
         selectedAccessories[accessoryKey] = cheapestType;
+        
+        select.addEventListener('change', (e) => {
+          selectedAccessories[accessoryKey] = e.target.value;
+          updatePrice();
+          validateProceedButton();
+        });
+
+        // Set initial selection
         setTimeout(() => {
-          const btns = optionsDiv.querySelectorAll('.option-btn');
-          btns.forEach(btn => {
-            if (btn.textContent.startsWith(cheapestType)) btn.click();
-          });
+          select.value = cheapestType;
         }, 10);
       });
     }
 
-    // ---------- Calculation Helpers & updatePrice() ----------
     function getMaterialBasePrice(materialKey) {
       if (!materialKey || !optionsData) return 0;
-      const opt = optionsData[materialKey];
+      const opt = optionsData.material[materialKey];
       if (opt == null) return 0;
-      if (typeof opt === 'object' && typeof opt.price === 'number') return opt.price;
-      if (typeof opt === 'number') return opt;
-      if (optionsData.materials && optionsData.materials[materialKey]) {
-        const m = optionsData.materials[materialKey];
-        if (typeof m === 'object' && typeof m.price === 'number') return m.price;
-        if (typeof m === 'number') return m;
-      }
+      if (typeof opt.price === 'number') return opt.price;
       return 0;
     }
 
     function getColorBasePrices(colorGroupName) {
       if (!colorGroupName || !optionsData) return {};
-      const group = options_data_fallback(colorGroupName);
+      const group = optionsData.colors[colorGroupName];
       if (group && typeof group === 'object') return group;
       return {};
-    }
-
-    function options_data_fallback(colorGroupName) {
-      if (optionsData[colorGroupName] && typeof optionsData[colorGroupName] === 'object') return optionsData[colorGroupName];
-      return optionsData[colorGroupName] || {};
     }
 
     function getPercentageFromValue(val) {
@@ -604,7 +602,7 @@
 
     function getAccessoryUnitPriceFromSelection(accessoryKey, selectedOptionName) {
       if (!optionsData || !accessoryKey) return 0;
-      const opt = optionsData[accessoryKey];
+      const opt = optionsData.accessory[accessoryKey];
       if (!opt) return 0;
       if (typeof opt === 'number') return opt;
       if (typeof opt === 'object') {
@@ -702,12 +700,10 @@
       document.getElementById('whatsappBtn').href = `https://wa.me/601111213149?text=${encodedMessage}`;
     }
 
-    // ---------------- Carousel functions ----------------
     function initProductCarousel(product) {
       const carouselContainer = document.getElementById('productImageCarousel');
       carouselContainer.innerHTML = '';
 
-      // 1) Add extra images (if any) first
       if (product.images && Array.isArray(product.images.extra)) {
         product.images.extra.forEach(imgUrl => {
           const slide = document.createElement('div');
@@ -717,7 +713,6 @@
         });
       }
 
-      // 2) Add color images (one per color) after extras
       if (product.images) {
         Object.entries(product.images).forEach(([key, value]) => {
           if (key === 'extra') return;
@@ -729,7 +724,6 @@
         });
       }
 
-      // 3) Init Swiper
       if (swiper) {
         try { swiper.destroy(true, true); } catch (e) {}
         swiper = null;
@@ -748,23 +742,17 @@
         a11y: true,
       });
 
-      // When user swipes, sync color selection (if slide has data-color)
       swiper.on('slideChange', () => {
         const activeSlide = swiper.slides[swiper.activeIndex];
         if (!activeSlide) return;
         const color = activeSlide.getAttribute('data-color');
         if (color) {
-          const container = document.getElementById('colorOptions');
-          if (container) {
-            container.querySelectorAll('.option-btn').forEach(b => {
-              const isMatch = (b.textContent || '').toLowerCase() === color;
-              b.classList.toggle('active', isMatch);
-              if (isMatch) {
-                selectedColor = b.textContent;
-                updatePrice();
-                validateProceedButton();
-              }
-            });
+          const colorSelect = document.getElementById('colorOptions');
+          if (colorSelect) {
+            colorSelect.value = color;
+            selectedColor = color;
+            updatePrice();
+            validateProceedButton();
           }
         }
       });
@@ -808,31 +796,10 @@
       proceedBtn.removeAttribute('disabled');
     }
 
-    function setDefaultSelections() {
-      const types = getAllTypes();
-      if(types.length === 0) return;
-
-      selectedType = types[0];
-      const typeBtns = document.getElementById('typeOptions').querySelectorAll('button');
-      if(typeBtns.length) highlightSelection(document.getElementById('typeOptions'), typeBtns[0]);
-
-      renderMaterialList(selectedType);
-
-      const colors = getColorsForType(selectedType);
-      if(colors.length) {
-        selectedColor = colors[0];
-        renderColorOptions(selectedType, selectedColor);
-        updateMainImage(selectedColor);
-      } else {
-        document.getElementById('colorSection').style.display = 'none';
-      }
-    }
-
     function toTitleCase(str) {
       return str.replace(/\b\w/g, c => c.toUpperCase());
     }
 
-    // Start
     fetchData();
   </script>
 </body>
