@@ -9,48 +9,65 @@
     "shelf"
   ],
 
-  "blockboard 18mm": {
-    "price": 100
+  "material": {
+    "blockboard 18mm": {
+      "price": 100
+    },
+
+    "blockboard 15mm": {
+      "price": 100
+    },
+
+    "plywood 6mm": {
+      "price": 100
+    },
+
+    "melamine chipboard 16mm": {
+      "price": 0
+    }
   },
 
-  "blockboard 15mm": {
-    "price": 100
+  "colors": {
+    "formica colors": {
+      "white": 100,
+      "black": 200,
+      "oak": 300,
+      "navy blue": 400,
+      "green sage": 500
+    },
+
+    "melamine chipboard 16mm colors": {
+      "white": 10,
+      "black": 20,
+      "oak": 30,
+      "green sage": 40,
+      "navy blue": 50
+    }
   },
 
-  "plywood 6mm": {
-    "price": 100
-  },
+  "accessory": {
+    "doorHinges": {
+      "normal": 10,
+      "soft close": 20,
+      "non soft close": 30,
+      "push to open": 40,
+      "undermount": 50
+    },
 
-  "melamine chipboard 16mm": {
-    "price": 0
-  },
+    "drawerSlides": {
+      "normal": 10,
+      "soft close": 20,
+      "non soft close": 30,
+      "push to open": 40,
+      "undermount": 50
+    },
 
-  "formica colors": {
-    "white": 100,
-    "black": 100,
-    "oak": 100,
-    "navy blue": 100
-  },
-
-  "melamine chipboard 16mm colors": {
-    "white": 100,
-    "black": 100,
-    "oak": 100,
-    "green sage": 100
-  },
-
-  "doorHinges": {
-    "normal": 100,
-    "soft close": 100
-  },
-
-  "drawerSlides": {
-    "normal": 100,
-    "soft close": 100
-  },
-
-  "pullOutPantrySlides" : {
-    "normal": 100,
-    "soft close": 100
+    "pullOutPantrySlides" : {
+      "normal": 10,
+      "soft close": 20,
+      "non soft close": 30,
+      "push to open": 40,
+      "undermount": 50
+    }
   }
 }
