@@ -282,48 +282,36 @@
       };
     }
 
-    function renderCategories(categories) {
-      const container = document.getElementById('categoryList');
-      container.innerHTML = '';
-
-      const allBtn = document.createElement('button');
-      allBtn.textContent = 'All';
-      allBtn.classList.add('active');
-      allBtn.onclick = () => filterByCategory('all');
-      container.appendChild(allBtn);
-
-      categories.forEach(cat => {
-        const btn = document.createElement('button');
-        btn.textContent = cat;
-        btn.onclick = () => filterByCategory(cat);
-        container.appendChild(btn);
-      });
-    }
-
-    function filterByCategory(category) {
-      currentCategory = category;
-      const buttons = document.querySelectorAll('.category-list button');
-      buttons.forEach(btn => btn.classList.remove('active'));
-      const activeBtn = [...buttons].find(btn => btn.textContent.toLowerCase() === (category === 'all' ? 'all' : category.toLowerCase()));
-      if (activeBtn) activeBtn.classList.add('active');
-
-      const filtered = category === 'all'
-        ? productsData
-        : productsData.filter(p => p.category.toLowerCase() === category.toLowerCase());
-
-      renderProducts(filtered, optionsData);
-    }
-
+   function renderCategories(categories) { const container = document.getElementById('categoryList'); 
+   container.innerHTML = ''; 
+   const allBtn = document.createElement('button'); 
+   allBtn.textContent = 'All'; 
+   allBtn.classList.add('active'); 
+   allBtn.onclick = () => filterByCategory('all'); 
+   container.appendChild(allBtn); categories.forEach(cat => { const btn = document.createElement('button');
+   btn.textContent = cat; btn.onclick = () => filterByCategory(cat); 
+   container.appendChild(btn); }); 
+  } function filterByCategory(category) { currentCategory = category; 
+    const buttons = document.querySelectorAll('.category-list button'); 
+    buttons.forEach(btn => btn.classList.remove('active')); 
+    const activeBtn = [...buttons].find(btn => btn.textContent.toLowerCase() === (category === 'all' ? 'all' : category.toLowerCase())); 
+    
+    if (activeBtn) activeBtn.classList.add('active'); 
+    const filtered = category === 'all' ? productsData : productsData.filter(p => p.category.toLowerCase() === category.toLowerCase()); 
+    
+    renderProducts(filtered, optionsData); }
     function renderProducts(products, options) {
       const grid = document.getElementById('productGrid');
       grid.innerHTML = '';
 
       products.forEach(product => {
         const priceInfo = calculateCheapestPrice(product, options);
-        const firstImage = Object.values(product.images)[0] || 'https://via.placeholder.com/220x180?text=No+Image';
+        const firstImage =
+  product.images?.extra?.[0] ||
+  'https://via.placeholder.com/220x180?text=No+Image';
 
         const colorNames = new Set();
-        ['type 1', 'type 2'].forEach(typeKey => {
+        ['type 1', 'type 2', 'type 3', 'type 4'].forEach(typeKey => {
           if (product[typeKey]) {
             for (const [key, val] of Object.entries(product[typeKey])) {
               if (key.toLowerCase().includes('color')) {
