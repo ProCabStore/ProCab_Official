@@ -1,190 +1,110 @@
-[
-  {"id": "product0", "name": "Wardrobe Two Door", "category": "wardrobe",
-
-    "type 1": {
-      "melamine chipboard 16mm": {
-        "price": { "percentage": 0 }
-      },
-      "plywood 6mm": {
-        "price": { "percentage": 100 }
-      },
-      "melamine chipboard 16mm colors": {
-        "white": [
-          { "percentage": 100, "color": "white" }
-        ],
-        "black": [
-          { "percentage": 100, "color": "black" }
-        ],
-        "oak": [
-          { "percentage": 100, "color": "oak" }
-        ],
-        "green sage": [
-          { "percentage": 100, "color": "green sage" }
-        ],
-        "navy blue": [
-          { "percentage": 100, "color": "navy blue" }
-        ],
-        "white + black": [
-          { "percentage": 100, "color": "white" },
-          { "percentage": 100, "color": "black" }
-        ]
-      }
-    },
-
-    "type 2": {
-      "blockboard 18mm": {
-        "price": { "percentage": 100 }
-      },
-      "blockboard 15mm": {
-        "price": { "percentage": 100 }
-      },
-      "plywood 6mm": {
-        "price": { "percentage": 100 }
-      },
-      "formica colors": {
-        "white": [
-          { "percentage": 100, "color": "white" }
-        ],
-        "black": [
-          { "percentage": 100, "color": "black" }
-        ],
-        "oak": [
-          { "percentage": 100, "color": "oak" }
-        ],
-        "green sage": [
-          { "percentage": 100, "color": "green sage" }
-        ],
-        "navy blue": [
-          { "percentage": 100, "color": "navy blue" }
-        ],
-        "white + black": [
-          { "percentage": 100, "color": "white" },
-          { "percentage": 100, "color": "black" }
-        ]
-      }
-    },
+[  
+  {"id": "0002", 
+  "name": "Shelf Organizers - Kitchen spice rack, Desktop organizer, Display stand & more. [0002]", 
+  "category": "rack",
+  "description": "<p><b>Specifications</b></p><ul><li>100% Solid Rubberwood</li><li>Adjustable Modular Design</li><li>Handcrafted &amp; Smooth Sanded Finish</li><li>Minimalist Modern Style</li><li>L 180mm X W 98mm X H 400mm</li><div class='img-center'><img src='photo/0002/my-11134207-820le-mo66k2h6zgg27c.jpeg' alt='product image'></div></ul><p><b>Premium Finish</b></p><ul><li>Premium Wood Stain — Enhances the natural wood grain with a rich finish</li><li>Sanding Sealer — Provides a smoother surface and added protection</li><li>PU Top Coat — Durable and scratch-resistant for long-lasting use</li></ul><p><b>⚠ Notes</b></p><p>Assembly Required<br>Screwdriver Required</p><p><b>About This Item</b></p><p>Keep your space neat and organized with this handcrafted Rubberwood Desktop Organizer &amp; Spice Rack. Designed with an adjustable modular layout, it combines functionality with a clean natural wood aesthetic.</p><p><b>Features</b></p><ul><li>Adjustable Design — Expandable two-piece layout fits different spaces and setups</li><li>Multi-Tier Storage — Perfect for organizing spices, stationery, books, or small decor items</li><li>Modular Layout — Can be arranged to suit your workspace or countertop</li><li>Solid Rubberwood — Durable with beautiful natural wood grain</li><li>Minimalist Design — Clean modern look suitable for various interiors</li></ul><p><b>Suitable For</b></p><ul><li>Kitchen</li><li>Office Desk</li><li>Bedroom</li><li>Living Room</li><li>Studio &amp; Workspace</li></ul>",
 
     "type 3": {
-
-    },
-
-    "type 4": {
-
-    },
-
-    "doorHinges": {
-        "normal": true,
-        "soft close": true,
-        "non soft close": true,
-        "push to open": false,
-        "undermount": false,
-        "quantity": 3
-    },
-
-    "drawerSlides": {
-        "normal": true,
-        "soft close": true,
-        "non soft close": true,
-        "push to open": false,
-        "undermount": true,
-        "quantity": 3
+      "rubberwood 18mm": {
+        "price": { "percentage": 100 }
+      },
+      "rubberwood 18mm colors": {
+        "natural": [
+          { "percentage": 0, "color": "natural" }
+        ],
+        "classic teak": [
+          { "percentage": 0, "color": "classic teak" }
+        ],
+        "natural walnut": [
+          { "percentage": 0, "color": "natural walnut" }
+        ]
+      }
     },
 
     
-    "pullOutPantrySlides" : {
-        "normal": true,
-        "soft close": true,
-        "non soft close": true,
-        "push to open": true,
-        "undermount": false,
-        "quantity": 3
-    },
-
     "images": {
-      "white": "photo/logo.png",
-      "black": "photo/logo.png",
-      "white + black": "photo/logo.png",
+      "natural": "photo/0000/3.jpeg",
+      "classic teak": "photo/0000/1.jpeg",
+      "natural walnut": "photo/0000/2.jpeg",
       "extra": [
-        "photo/logo.png",
-        "photo/logo.png",
-        "photo/logo.png"
+        "photo/0002/0002 photo 1.png",
+        "photo/0002/0002 photo 2.png",
+        "photo/0002/my-11134207-820l9-mo667ufxgwzkad (1).jpeg",
+        "photo/0002/my-11134207-820li-mo66825bkrnpea.jpeg"
       ]
     }
   },
+  {"id": "0003", 
+  "name": "Entryway Shelf & Key Organizer [0003]", 
+  "category": "shelf & hook",
+  "description": "<p><b>Specifications</b></p><ul><li>100% Solid Rubberwood</li><li>Wall-Mounted Design</li><li>Handcrafted &amp; Smooth Sanded Finish</li><li>Minimalist Modern Style</li><li>L 180mm X W 98mm X H 400mm</li><div class='img-center'><img src='photo/0003/WhatsApp Image 2026-05-11 at 20.30.17.jpeg' alt='product image'></div></ul><p><b>Premium Finish</b></p><ul><li>Wood Stain — Enhances natural wood grain with a rich finish</li><li>Sanding Sealer — Smooth surface and added protection</li><li>PU Top Coat — Durable and scratch-resistant for long-lasting use</li></ul><p><b>⚠ Notes</b></p><p>Assembly Required<br>Screwdriver Required</p><p><b>About This Item</b></p><p>Keep your keys and daily essentials organized with this handcrafted Rubberwood Key Holder Shelf. Designed with a clean minimalist look, it adds both functionality and a warm natural wood touch to your space.</p><p><b>Features</b></p><ul><li>Storage Shelf — Perfect for wallets, sunglasses, mail, or small decor items</li><li>5 Wooden Hooks — Ideal for keys, lanyards, hats, or accessories</li><li>Raised Shelf Edge — Helps keep items securely in place</li><li>Solid Rubberwood — Durable with natural wood grain finish</li><li>Space-Saving Wall Design — Keeps essentials organized without clutter</li></ul><p><b>Suitable For</b></p><ul><li>Entryway</li><li>Bedroom</li><li>Kitchen</li><li>Office</li><li>Studio</li></ul>",
 
-  {"id": "product1", "name": "Wardrobe Two Door", "category": "wardrobe",
-
-    "type 1": {
-      "melamine chipboard 16mm": {
-        "price": { "percentage": 0 }
-      },
-      "plywood 6mm": {
+    "type 3": {
+      "rubberwood 18mm": {
         "price": { "percentage": 100 }
       },
-      "melamine chipboard 16mm colors": {
-        "white": [
-          { "percentage": 100, "color": "white" }
+      "rubberwood 18mm colors": {
+        "natural": [
+          { "percentage": 55, "color": "natural" }
         ],
-        "black": [
-          { "percentage": 100, "color": "black" }
+        "classic teak": [
+          { "percentage": 67, "color": "classic teak" }
         ],
-        "white + black": [
-          { "percentage": 100, "color": "white" },
-          { "percentage": 100, "color": "black" }
+        "natural walnut": [
+          { "percentage": 67, "color": "natural walnut" }
         ]
       }
     },
 
-    "type 2": {
-      "blockboard 18mm": {
-        "price": { "percentage": 251 }
-      },
-      "blockboard 15mm": {
-        "price": { "percentage": 49 }
-      },
-      "plywood 6mm": {
-        "price": { "percentage": 66 }
-      },
-      "formica colors": {
-        "white": [
-          { "percentage": 161, "color": "white" }
-        ],
-        "black": [
-          { "percentage": 161, "color": "black" }
-        ],
-        "white + black": [
-          { "percentage": 68, "color": "white" },
-          { "percentage": 93, "color": "black" }
-        ]
-      }
-    },
-
-    "doorHinges": {
-        "normal": true,
-        "soft close": true,
-        "non soft close": true,
-        "push to open": true,
-        "undermount": false,
-        "quantity": 3
-    },
-
-    "drawerSlides": {
-        "normal": true,
-        "soft close": true,
-        "non soft close": true,
-        "push to open": true,
-        "undermount": false,
-        "quantity": 3
-    },
     
     "images": {
-      "white": "photo/wardrobe 1 picture 1.png",
-      "black": "photo/wardrobe 1 picture 5.png",
-      "white + black": "photo/wardrobe 1 picture 4.png",
+      "natural": "photo/0000/3.jpeg",
+      "classic teak": "photo/0000/1.jpeg",
+      "natural walnut": "photo/0000/2.jpeg",
       "extra": [
-        "photo/wardrobe 1 picture 1.png",
-        "photo/wardrobe 1 picture 2.png",
-        "photo/wardrobe 1 picture 3.png"
+        "photo/0003/0003 photo 1.png",
+        "photo/0003/0003 photo 2.png",
+        "photo/0003/WhatsApp Image 2026-05-11 at 20.30.12.jpeg",
+        "photo/0003/WhatsApp Image 2026-05-11 at 20.30.19.jpeg"
+      ]
+    }
+  },
+  {"id": "0004", 
+  "name": "Helmet & Key Holder Rack - Wall Mounted Helmet Rack [0004]", 
+  "category": "shelf & hook",
+  "description": "<p><b>Specifications</b></p><ul><li>100% Solid Rubberwood</li><li>Wall-Mounted Design</li><li>Handcrafted &amp; Smooth Sanded Finish</li><li>Minimalist Modern Style</li><li>L 450mm ea X W 150mm X H 450mm</li><div class='img-center'><img src='photo/0004/qwe.jpeg' alt='product image'></div></ul><p><b>Premium Finish</b></p><ul><li>Premium Wood Stain — Enhances the natural wood grain with a rich finish</li><li>Sanding Sealer — Provides a smoother surface and added protection</li><li>PU Top Coat — Durable and scratch-resistant for long-lasting use</li></ul><p><b>⚠ Notes</b></p><p>Assembly Required<br>Screwdriver Required</p><p><b>About This Item</b></p><p>Keep your helmet, keys, and daily essentials organized with this handcrafted Rubberwood Helmet Rack. Designed with a clean minimalist style, it adds both functionality and a warm natural wood touch to your space.</p><p><b>Features</b></p><ul><li>Angled Helmet Holder — Supports and displays helmets securely</li><li>Storage Shelf — Perfect for wallets, gloves, and small essentials</li><li>Key Hooks — Convenient for keys and lanyards</li><li>Solid Rubberwood — Durable with beautiful natural wood grain</li><li>Space-Saving Design — Compact wall-mounted organizer</li></ul><p><b>Suitable For</b></p><ul><li>Entryway</li><li>Garage</li><li>Bedroom</li><li>Studio</li><li>Motorcycle Riders</li></ul>",
+
+    "type 3": {
+      "rubberwood 18mm": {
+        "price": { "percentage": 100 }
+      },
+      "rubberwood 18mm colors": {
+        "natural": [
+          { "percentage": 0, "color": "natural" }
+        ],
+        "classic teak": [
+          { "percentage": 0, "color": "classic teak" }
+        ],
+        "natural walnut": [
+          { "percentage": 0, "color": "natural walnut" }
+        ]
+      }
+    },
+
+    
+    "images": {
+      "natural": "photo/0000/3.jpeg",
+      "classic teak": "photo/0000/1.jpeg",
+      "natural walnut": "photo/0000/2.jpeg",
+      "extra": [
+        "photo/0004/0004 photo 1.png",
+        "photo/0004/0004 photo 2.png",
+        "photo/0004/123.jpeg",
+        "photo/0004/312.jpeg"
+      ]
+    }
+  }
+]
       ]
     }
   }
