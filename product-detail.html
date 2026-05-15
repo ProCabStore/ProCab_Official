@@ -211,11 +211,11 @@
     }
     .btn-proceed {
       flex: 1;
-      background: #111827;
-      color: #fff;
+      background:  #10947e 100%;
+      color: #ffffff;
       height:44px;
-      opacity: .5;
-      cursor: not-allowed;
+      opacity: 90;
+      cursor: allowed;
       text-align: center;
     }
     .btn-proceed.enabled {
@@ -239,6 +239,81 @@
       .action-buttons .btn-back { flex-basis: 46%; }
       .action-buttons .btn-proceed { flex-basis: 48%; }
     }
+
+  /* reuse existing layout system */
+  .description-card {
+    background: var(--card);
+    border-radius: var(--radius);
+    box-shadow: 0 6px 20px rgba(15, 23, 42, 0.06);
+
+    margin-top: 18px;
+    overflow: hidden;
+  }
+
+  /* reuse same spacing feel as .details */
+  .description-card .details {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  /* mobile consistency */
+  @media (max-width:420px) {
+    .description-card {
+      border-radius: 0;
+    }
+
+    .description-card .details {
+      padding: 12px;
+    }
+  }
+
+  /* description box */
+  #productDescription {
+    width: 100%;
+    padding: 10px 12px;
+
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    background-color: #f8f9fb;
+
+    font-size: 0.9rem;
+    color: #111827;
+    line-height: 1.6;
+
+    white-space: pre-line;
+    box-sizing: border-box;
+  }
+
+  #productDescription img {
+
+    display: block;
+    margin: 14px auto;
+
+    border-radius: 8px;
+  }
+
+  @media (max-width: 420px) {
+    #productDescription img {
+      max-width: 92%;
+    }
+  }
+
+  .img-center {
+  display: flex;
+  justify-content: center;
+  margin: 16px 0;
+}
+
+.img-center img {
+  width: 100%;
+  max-width: 400px;   /* keeps it nice on laptop */
+  height: auto;
+  border-radius: 0px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+}
+
   </style>
 </head>
 <body>
@@ -282,11 +357,25 @@
 
         <div class="action-buttons">
           <a href="our-products.html" class="btn btn-back">&larr; Back</a>
-          <a id="whatsappBtn" class="btn btn-proceed" href="#" target="_blank">Proceed to Order</a>
+          <a id="whatsappBtn" class="btn btn-proceed" href="#" target="_blank">PreOrder Now</a>
         </div>
       </div>
     </div>
   </div>
+
+ <div class="wrap">
+  <div class="description-card">
+    <div class="details">
+
+      <div class="section" id="descriptionSection">
+        <h4>Product Description</h4>
+        <div id="productDescription"></div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
 
   <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 
@@ -324,6 +413,10 @@
 
     function renderProduct() {
       document.getElementById('productName').textContent = productData.name;
+      
+// ✅ NEW: product description from JSON
+document.getElementById('productDescription').innerHTML = productData.description || '';
+
       initProductCarousel(productData);
       renderTypeOptions();
       renderAccessories();
@@ -338,6 +431,7 @@
     const typeNameMap = {
       'type 1': 'Melamine Chipboard',
       'type 2': 'Blockboard + Formica',
+      'type 3': 'Solid Rubberwood',
     };
 
     function renderTypeOptions() {
